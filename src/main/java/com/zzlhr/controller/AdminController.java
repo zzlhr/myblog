@@ -165,13 +165,16 @@ public class AdminController {
 //
 //
 
-    @GetMapping("/articlelist.json")
+    @RequestMapping("/articlelist")
     public String getArticleList(Integer page){
         PageRequest pageRequest = new PageRequest(page-1,10);
         Page<Article> pages = articleDao.findAll(pageRequest);
         List<Article> articleList = pages.getContent();
         return JSON.toJSONString(articleList);
     }
+
+
+
 
 
 
