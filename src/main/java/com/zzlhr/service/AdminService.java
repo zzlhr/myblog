@@ -59,8 +59,6 @@ public class AdminService {
 
         MsgVo msgVo = new MsgVo();
 
-        System.out.println(Code.EncoderByMd5(password));
-        System.out.println(admin.getAdminPassword());
 
         if (admin == null){
             log.writeLog(LogTypeEnum.LOGIN_ERROR.getCode(),
@@ -79,6 +77,9 @@ public class AdminService {
         } else if (AdminStatusEnum.OK.getCode()
                 != admin.getAdminStatus()){
 
+            log.writeLog(LogTypeEnum.LOGIN_ERROR.getCode(),
+                    LogTypeEnum.LOGIN_ERROR.getMsg(),adminName, loginIp);
+
             /* 用户名或密码错误 */
             msgVo.setApiCode(LoginEnum.NOTLOGIN.getCode());
 
@@ -89,6 +90,9 @@ public class AdminService {
             return msgVo;
 
         } else if (Code.EncoderByMd5(password).equals(admin.getAdminPassword())){
+
+            log.writeLog(LogTypeEnum.LOGIN_SUCCESS.getCode(),
+                    LogTypeEnum.LOGIN_SUCCESS.getMsg(),adminName, loginIp);
 
             /* 登录成功 */
 
@@ -108,6 +112,10 @@ public class AdminService {
 
             return msgVo;
         } else {
+
+            log.writeLog(LogTypeEnum.LOGIN_ERROR.getCode(),
+                    LogTypeEnum.LOGIN_ERROR.getMsg(),adminName, loginIp);
+
 
             /* 用户名或密码错误 */
             msgVo.setApiCode(LoginEnum.PASSWORDERROR.getCode());

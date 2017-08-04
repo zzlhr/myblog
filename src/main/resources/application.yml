@@ -21,3 +21,11 @@ spring:
     maxOpenPreparedStatements: 20
   jpa:
     show-sql: true
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+  freemarker:
+    cache: false
+    charset: utf-8
+    check-template-location: true
+    content-type: text/html

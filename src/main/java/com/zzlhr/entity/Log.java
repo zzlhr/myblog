@@ -2,6 +2,7 @@ package com.zzlhr.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,6 +20,8 @@ public class Log implements Serializable{
 
   private String value;
 
+  /* 创建时间，使用数据库默认值 */
+  @Column(insertable = false)
   private java.sql.Timestamp time;
 
   private String ip;
