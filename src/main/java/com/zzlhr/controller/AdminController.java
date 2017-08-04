@@ -1,27 +1,18 @@
 package com.zzlhr.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.zzlhr.dao.AdminDao;
 import com.zzlhr.dao.ArticleDao;
-import com.zzlhr.entity.Admin;
 import com.zzlhr.entity.Article;
-import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.service.AdminService;
-import com.zzlhr.util.RequestUtil;
-import com.zzlhr.vo.LoginVo;
+import com.zzlhr.vo.ArticleListVo;
+import com.zzlhr.vo.ArticleVo;
 import com.zzlhr.vo.MsgVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -166,11 +157,54 @@ public class AdminController {
 //
 
     @RequestMapping("/articlelist")
-    public String getArticleList(Integer page){
+    public Object getArticleList(Integer page){
         PageRequest pageRequest = new PageRequest(page-1,10);
         Page<Article> pages = articleDao.findAll(pageRequest);
         List<Article> articleList = pages.getContent();
-        return JSON.toJSONString(articleList);
+
+
+        /* 创建消息对象 */
+        MsgVo<ArticleListVo> msg = new MsgVo<ArticleListVo>();
+
+        msg.setApiCode(0);
+
+        msg.setApiMessage("ok");
+
+
+
+        /* 创建msg.data对象 */
+        ArticleListVo articleListVo = new ArticleListVo();
+
+
+        List<ArticleVo> articleListVos = new ArrayList<>();
+
+        for (Article article : articleList){
+
+            ArticleVo articleVo = new ArticleVo();
+
+            articleVo.setId(article.getId());
+            articleVo.setClazz(article.getArticleClass().getClassName());
+            articleVo.setCommend(article.getArticleCommend());
+            articleVo.setDescribe(article.getArticleDescribe());
+            articleVo.setStatus(article.getStatus().getClassname());
+            articleVo.setText(article.getArticleText());
+            articleVo.setTime(article.getArticleTime());
+            articleVo.setTitle(article.getArticleTitle());
+            articleListVos.add(articleListVo);
+
+            System.gc();
+        }
+
+
+        articleListVo.setArticles(articleListVos);
+        System.gc();
+
+        msg.setData(articleListVo);
+        System.gc();
+
+        System.out.println(msg);
+
+        return msg;
     }
 
 
