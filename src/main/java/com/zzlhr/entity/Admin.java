@@ -20,6 +20,9 @@ public class Admin implements Serializable{
   /** 用户名 */
   private String adminName;
 
+  /** 管理员邮箱 */
+  private String adminEmail;
+
   /** 密码 */
   private String adminPassword;
 
@@ -31,4 +34,7 @@ public class Admin implements Serializable{
 
   /** 登录ip */
   private String adminIp;
+
+  /** 登录地址 */
+  private String adminAddress;
 }

@@ -1,9 +1,7 @@
 package com.zzlhr.vo;
 
 import lombok.Data;
-
-import java.util.Date;
-import java.util.List;
+import net.sf.json.JSONArray;
 
 /**
  * Created by 刘浩然 on 2017/8/4.
@@ -15,6 +13,6 @@ public class ArticleListVo extends ArticleVo {
 
     private Integer allpage;
 
-    private List<ArticleVo> articles;
+    private JSONArray articles;
 
 }

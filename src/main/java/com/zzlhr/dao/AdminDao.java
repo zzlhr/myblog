@@ -16,4 +16,6 @@ public interface AdminDao extends JpaRepository<Admin, Integer>{
      * @return  管理员对象
      */
     Admin findByAdminName(String adminName);
+
+    Admin findByAdminEmail(String adminEmail);
 }

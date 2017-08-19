@@ -7,7 +7,8 @@ public enum LoginEnum {
     SUCCESS(0, "登录成功！"),
     USERNOTEXIST(1, "用户不存在"),
     PASSWORDERROR(2, "用户名或密码错误"),
-    NOTLOGIN(3, "禁止登录")
+    NOTLOGIN(3, "禁止登录"),
+    ADMINEXCEPTION(4, "账号异常"),
     ;
 
     private LoginEnum(int code, String msg) {
