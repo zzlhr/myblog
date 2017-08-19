@@ -1,7 +1,5 @@
 package com.zzlhr.service;
 
-import com.zzlhr.vo.LoginVo;
-import com.zzlhr.vo.MsgVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,9 @@ public class AdminServiceTest {
 
     @Test
     public void login() throws Exception {
-        MsgVo<LoginVo> msgVo =
-                adminService.login("admin","123456","192.168.0.1");
-        System.out.println(msgVo);
+//        MsgVo<LoginVo> msgVo =
+//                adminService.login("admin","123456","192.168.0.1");
+//        System.out.println(msgVo);
     }
 
 }

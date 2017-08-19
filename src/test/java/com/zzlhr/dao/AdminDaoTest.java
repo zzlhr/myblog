@@ -26,4 +26,10 @@ public class AdminDaoTest {
         List<Admin> result = adminDao.findAll();
         Assert.assertNotEquals(0, result.size());
     }
+
+    @Test
+    public void findByAdminEmail(){
+        Admin admin = adminDao.findByAdminEmail("2388399752@qq.com");
+        Assert.assertNotNull(admin);
+    }
 }
