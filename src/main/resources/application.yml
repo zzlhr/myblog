@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://localhost/blog?useUnicode=true&characterEncoding=UTF-8&useSSL=true
     driver-class-name: com.mysql.jdbc.Driver
     username: root
-    password: root
+    password: Liu123456
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
