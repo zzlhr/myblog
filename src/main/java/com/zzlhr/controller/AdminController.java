@@ -35,59 +35,6 @@ public class AdminController {
     @Autowired
     private AdminDao adminDao;
 
-//    @ResponseBody
-//    @PostMapping("/login.do")
-//    public String dLogin(String name, String password,
-//                              HttpServletRequest request, HttpServletResponse response){
-//        try {
-//            MsgVo<LoginVo> msgVo = adminService.login(name,password, RequestUtil.getRemortIP(request));
-//            if (LoginEnum.SUCCESS.getCode() == msgVo.getApiCode()){
-//                //登录成功
-//                Cookie cookie = new Cookie("name",msgVo.getData().getUserName());
-//                response.addCookie(cookie);
-//                cookie = new Cookie("token", msgVo.getData().getToken());
-//                response.addCookie(cookie);
-//                request.getSession().setAttribute("token",msgVo.getData().getToken());
-//                request.getSession().setAttribute("name",msgVo.getData().getUserName());
-//                return "<script>alert('"+LoginEnum.SUCCESS.getMsg()+"');location.href='index.html'</script>";
-//            }else if (LoginEnum.PASSWORDERROR.getCode() == msgVo.getApiCode() ||
-//                    LoginEnum.USERNOTEXIST.getCode() == msgVo.getApiCode()){
-//                return "<script>alert('用户名或密码错误！');location.href='login.html'</script>";
-//            }else {
-//                return "<script>alert('登录失败！');location.href='login.html'</script>";
-//            }
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//            return "<script>alert('登录失败！');location.href='login.html'</script>";
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//            return "<script>alert('登录失败！');location.href='login.html'</script>";
-//        }
-//    }
-//
-//    @GetMapping("/login.html")
-//    public String vLogin(){
-//        return "admin/login";
-//    }
-//
-//
-//    @GetMapping("/index.html")
-//    public String vIndex(HttpServletRequest request, Model model){
-////        if (request.getSession().getAttribute("token") == null){
-////            return "admin/login";
-////        }
-//        model.addAttribute("name",request.getSession().getAttribute("name"));
-//        return "admin/index";
-//    }
-//
-//
-//
-//    @GetMapping("/article.html")
-//    public String vArticle(HttpServletRequest request){
-//        return "admin/article";
-//    }
-//
-//
     @ResponseBody
     @PostMapping("/article.do")
     public String articleDo(Article article, Integer type,
@@ -142,20 +89,6 @@ public class AdminController {
         return "redirect:error.html";
     }
 
-//    @GetMapping("/article-add.html")
-//    public ModelAndView addArticle(){
-//        return new ModelAndView("admin/article-add");
-//    }
-//    @GetMapping("/article-update.html")
-//    public ModelAndView updateArticle(Integer id, HttpServletRequest request){
-//        ModelAndView model = new ModelAndView("admin/article-add");
-//        Article article = articleDao.findOne(id);
-//        model.addObject("request",request);
-//        model.addObject("article", article);
-//        return model;
-//    }
-//
-//
 
     @RequestMapping("/articlelist")
     public String getArticleList(@RequestParam(value = "page", defaultValue = "1") Integer page){

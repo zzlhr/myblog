@@ -6,6 +6,7 @@ import com.zzlhr.entity.Admin;
 import com.zzlhr.enums.AdminStatusEnum;
 import com.zzlhr.enums.ExceptionEnum;
 import com.zzlhr.enums.LoginEnum;
+import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.util.BlogException;
 import com.zzlhr.util.Code;
@@ -31,11 +32,11 @@ public class AdminServiceImpl implements AdminService {
     private AdminDao dao;
 
     @Override
-    public Map<String, String> deleteAdmin(String adminName, String ip) {
+    public Map<String, Object> deleteAdmin(String adminName, String ip) {
 
         Admin admin = null;
 
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
 
         //查询管理员是否存在
         if ((admin = this.findAdmin(adminName)) == null){
@@ -55,9 +56,22 @@ public class AdminServiceImpl implements AdminService {
         return result;
     }
 
-    @Override
-    public Admin updateAdmin(Admin admin, String ip) {
-        return null;
+    @Transactional
+    Map<String, Object> updateAdmin(Admin admin, String ip) {
+        log.info("【修改管理员】Admin={}",admin);
+        Map result = new HashMap();
+        //查询admin是否存在
+        if (dao.findOne(admin.getId()) == null){
+            result.put("code", ResultErrorStatus.ADMIN_NOTEXIST.getCode());
+            result.put("msg", ResultErrorStatus.ADMIN_NOTEXIST.getMsg());
+            return result;
+        }
+
+        //存在进行更新
+        dao.save(admin);
+        result.put("code", 0);
+        result.put("msg", "操作成功!");
+        return result;
     }
 
     @Override
@@ -65,16 +79,19 @@ public class AdminServiceImpl implements AdminService {
 
         Admin result = null;
 
+        //存在返回admin
         if ((result = dao.findByAdminName(admin)) != null ||
                 (result = dao.findByAdminEmail(admin)) != null ){
             return result;
         }
+
+        //失败返回空
         return null;
     }
 
     @Override
     @Transactional
-    public Map login(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public Map<String, Object> login(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Map re = new HashMap<>();
         Admin result = null;
         //查询admin
@@ -132,13 +149,67 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public Admin updateAdminPassword(String admin, String oldPassword, String newPassword, String ip) {
-        return null;
+    public Map<String, Object> updateAdminPassword(String admin, String oldPassword, String newPassword, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        //获取admin对象
+        Admin admin1 = findAdmin(admin);
+        Map result = new HashMap();
+
+        //判断admin是否存在
+        if(admin1 == null){
+            result.put("code", ResultErrorStatus.ADMIN_NOTEXIST.getCode());
+            result.put("msg", ResultErrorStatus.ADMIN_NOTEXIST.getMsg());
+            return result;
+        }
+
+        //判断oldpassword 是否 等于 admin当前密码
+        if (!Code.EncoderByMd5(oldPassword).equals(admin1.getAdminPassword())){
+            result.put("code", ResultErrorStatus.ADMIN_PASSWORD_ERROR.getCode());
+            result.put("msg", ResultErrorStatus.ADMIN_PASSWORD_ERROR.getMsg());
+            return result;
+        }
+
+        //修改
+        admin1.setAdminPassword(Code.EncoderByMd5(newPassword));
+
+        //日志
+        log.info("【修改密码】admin={}",admin);
+
+        result.put("code", 0);
+        result.put("msg", "操作成功！");
+        return result;
     }
 
     @Override
-    public Admin addAdmin(Admin admin, String ip) {
-        return null;
+    public Map<String, Object> addAdmin(Admin admin, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        Map result = new HashMap();
+
+
+        //设置主键为null，防止自定义
+        admin.setId(null);
+
+        //查询admin是否存在
+        if (dao.findByAdminName(admin.getAdminName()) == null &&
+                dao.findByAdminEmail(admin.getAdminEmail()) == null){
+            result.put("code", ResultErrorStatus.ADMIN_ISEXIST.getCode());
+            result.put("msg", ResultErrorStatus.ADMIN_ISEXIST.getMsg());
+            return result;
+        }
+
+        //设置加密密码
+        admin.setAdminPassword(Code.EncoderByMd5(admin.getAdminPassword()));
+        //设置ip
+        admin.setAdminIp(ip);
+
+        //查询并设置ip地址
+        String address = PassIpGetAddress.getAddress(ip);
+        admin.setAdminAddress(address);
+
+        dao.save(admin);
+
+        result.put("code", 0);
+        result.put("msg", "操作成功！");
+        return result;
     }
 
 

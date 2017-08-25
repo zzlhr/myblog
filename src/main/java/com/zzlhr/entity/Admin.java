@@ -3,6 +3,7 @@ package com.zzlhr.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,13 +28,14 @@ public class Admin implements Serializable{
   private String adminPassword;
 
   /** 令牌 */
+  @Column(insertable = false)
   private String adminToken;
 
   /** 状态0为允许登录，1为禁止登录 */
-  private Integer adminStatus;
+  private Integer adminStatus = 0;
 
   /** 登录ip */
-  private String adminIp;
+  private String adminIp = "0.0.0.0";
 
   /** 登录地址 */
   private String adminAddress;
