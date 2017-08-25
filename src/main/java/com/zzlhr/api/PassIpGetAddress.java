@@ -15,7 +15,13 @@ public class PassIpGetAddress {
     public static String getAddress(String ip) throws UnsupportedEncodingException {
         HttpClientUtil http = new HttpClientUtil();
         JSONObject result = JSONObject.fromObject(http.url("http://ip.taobao.com/service/getIpInfo.php").get().param("ip", ip).send());
-        JSONObject data = result.getJSONObject("data");
+        JSONObject data;
+        try {
+            data = result.getJSONObject("data");
+        }catch (Exception e){
+            return "未知";
+        }
+
         return data.getString("region") + "-" + data.getString("city");
     }
 
