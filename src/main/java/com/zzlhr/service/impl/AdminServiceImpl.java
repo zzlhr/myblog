@@ -3,10 +3,7 @@ package com.zzlhr.service.impl;
 import com.zzlhr.api.PassIpGetAddress;
 import com.zzlhr.dao.AdminDao;
 import com.zzlhr.entity.Admin;
-import com.zzlhr.enums.AdminStatusEnum;
-import com.zzlhr.enums.ExceptionEnum;
-import com.zzlhr.enums.LoginEnum;
-import com.zzlhr.enums.ResultErrorStatus;
+import com.zzlhr.enums.*;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.util.BlogException;
 import com.zzlhr.util.Code;
@@ -229,6 +226,27 @@ public class AdminServiceImpl implements AdminService {
             adminListVoList.add(adminListVo);
         }
         return PageListData.getMap(page, adminListVoList);
+    }
+
+    @Override
+    public Map<String, Object> findAdminById(Integer id) {
+        Admin admin = dao.findOne(id);
+        Map<String, Object> result = new HashMap<>();
+        if (admin == null){
+            result.put("code", ResultErrorStatus.ADMIN_NOTEXIST.getCode());
+            result.put("msg", ResultErrorStatus.ADMIN_NOTEXIST.getMsg());
+            return result;
+        }
+
+        //转换admin对象为vo对象
+        AdminListVo vo = new AdminListVo();
+
+        BeanUtils.copyProperties(admin, vo);
+        result.put("code", 0);
+        result.put("msg", "操作成功！");
+        result.put("data", vo);
+
+        return result;
     }
 
 

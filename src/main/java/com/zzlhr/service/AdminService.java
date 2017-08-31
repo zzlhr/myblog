@@ -36,4 +36,6 @@ public interface AdminService {
     PageListData findAdminByAdminNameLike(String adminName, PageRequest pageRequest);
 
 
+    Map<String, Object> findAdminById(Integer id);
+
 }
