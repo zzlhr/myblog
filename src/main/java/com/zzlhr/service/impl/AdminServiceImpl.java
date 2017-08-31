@@ -10,16 +10,20 @@ import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.util.BlogException;
 import com.zzlhr.util.Code;
+import com.zzlhr.vo.AdminListVo;
+import com.zzlhr.vo.AdminVo;
+import com.zzlhr.vo.PageListData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by 刘浩然 on 2017/7/26.
@@ -171,7 +175,7 @@ public class AdminServiceImpl implements AdminService {
 
         //修改
         admin1.setAdminPassword(Code.EncoderByMd5(newPassword));
-
+        dao.save(admin1);
         //日志
         log.info("【修改密码】admin={}",admin);
 
@@ -184,13 +188,12 @@ public class AdminServiceImpl implements AdminService {
     public Map<String, Object> addAdmin(Admin admin, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Map result = new HashMap();
 
-
         //设置主键为null，防止自定义
         admin.setId(null);
 
         //查询admin是否存在
-        if (dao.findByAdminName(admin.getAdminName()) == null &&
-                dao.findByAdminEmail(admin.getAdminEmail()) == null){
+        if (dao.findByAdminName(admin.getAdminName()) != null ||
+                dao.findByAdminEmail(admin.getAdminEmail()) != null){
             result.put("code", ResultErrorStatus.ADMIN_ISEXIST.getCode());
             result.put("msg", ResultErrorStatus.ADMIN_ISEXIST.getMsg());
             return result;
@@ -206,14 +209,27 @@ public class AdminServiceImpl implements AdminService {
         admin.setAdminAddress(address);
 
         dao.save(admin);
-
+        AdminVo adminVo = new AdminVo();
+        BeanUtils.copyProperties(admin, adminVo);
         result.put("code", 0);
         result.put("msg", "操作成功！");
+        result.put("data",adminVo);
         return result;
     }
 
+    @Override
+    public PageListData findAdminByAdminNameLike(String adminName, PageRequest pageRequest) {
+        Page<Admin> page = dao.findAdminsByAdminNameLike(adminName, pageRequest);
 
-
+        java.util.List<Admin> list = page.getContent();
+        List<AdminListVo> adminListVoList = new ArrayList<>();
+        for (Admin admin : list){
+            AdminListVo adminListVo = new AdminListVo();
+            BeanUtils.copyProperties(admin, adminListVo);
+            adminListVoList.add(adminListVo);
+        }
+        return PageListData.getMap(page, adminListVoList);
+    }
 
 
 }
