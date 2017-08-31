@@ -1,6 +1,8 @@
 package com.zzlhr.service;
 
 import com.zzlhr.entity.Admin;
+import com.zzlhr.vo.PageListData;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -29,5 +31,9 @@ public interface AdminService {
 
 
     Map<String, Object> addAdmin(Admin admin, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+
+
+    PageListData findAdminByAdminNameLike(String adminName, PageRequest pageRequest);
+
 
 }

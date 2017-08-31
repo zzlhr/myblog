@@ -15,10 +15,20 @@ public class AuthorityUtil {
     private static Integer isHaveAuthority(Integer number, Integer menuDoId){
 
         //无敌的与运算，直接出权限
-        Integer result = (number >> menuDoId) & 1;
+        Integer result = (number >> (menuDoId+1)) & 1;
         System.out.println(result);
         return result;
 
+    }
+
+
+    public static void main(String[] args) {
+        isHaveAuthority(1,1);
+
+//        System.out.println(UUID.randomUUID());
+//        System.out.println(UUID.randomUUID());
+//        System.out.println(UUID.randomUUID());
+//        System.out.println(UUID.randomUUID());
     }
 
 

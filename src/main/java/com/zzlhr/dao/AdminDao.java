@@ -1,6 +1,8 @@
 package com.zzlhr.dao;
 
 import com.zzlhr.entity.Admin;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +20,6 @@ public interface AdminDao extends JpaRepository<Admin, Integer>{
     Admin findByAdminName(String adminName);
 
     Admin findByAdminEmail(String adminEmail);
+
+    Page<Admin> findAdminsByAdminNameLike(String adminName, Pageable pageable);
 }

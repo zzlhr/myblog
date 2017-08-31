@@ -1,152 +1,117 @@
 package com.zzlhr.controller;
 
-import com.zzlhr.dao.AdminDao;
-import com.zzlhr.dao.ArticleDao;
-import com.zzlhr.entity.Article;
-import com.zzlhr.vo.ArticleListVo;
-import com.zzlhr.vo.ArticleVo;
-import com.zzlhr.vo.MsgVo;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.google.gson.Gson;
+import com.zzlhr.entity.Admin;
+import com.zzlhr.enums.ResultErrorStatus;
+import com.zzlhr.enums.ResultSuccessStatus;
+import com.zzlhr.service.AdminService;
+import com.zzlhr.util.NetworkUtil;
+import com.zzlhr.util.RequestUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.zzlhr.enums.ResultErrorStatus.UNKNOWN_ERROR;
+import static java.lang.String.valueOf;
 
 /**
  * Created by 刘浩然 on 2017/7/27.
  */
 @RestController
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
 
-//    @Autowired
-//    private AdminService adminService;
-
     @Autowired
-    private ArticleDao articleDao;
+    private AdminService adminService;
 
+    Gson gson = new Gson();
 
-    @Autowired
-    private AdminDao adminDao;
+    private Map<String, Object> errorRequst = new HashMap<>();
 
-    @ResponseBody
-    @PostMapping("/article.do")
-    public String articleDo(Article article, Integer type,
-                            HttpServletRequest request, HttpServletResponse response,
-                            Model model){
-        switch (type){
-            case 1:
-                //添加
-                if (article.getArticleTitle() == null){
-                    return "<script>alert('请输入标题！');</script>";
-                } else if (article.getArticleText() == null){
-                    return "<script>alert('请输入内容！');</script>";
-                }
-//                Admin admin = adminDao.findByAdminName(article.getAdmin().getAdminName());
-                article.setId(null);
-//                article.setAdmin(admin);
-                articleDao.save(article);
-                return "<script>alert('操作成功！')</script>";
-            case 2:
-                //修改
-
-                if (article.getArticleTitle() == null){
-                    return "<script>alert('请输入标题！')</script>";
-                } else if (article.getArticleText() == null){
-                    return "<script>alert('请输入内容！')</script>";
-                }
-                //获取文章
-                Article articleOld = articleDao.findOne(article.getId());
-                System.out.println(articleOld);
-                articleOld.setArticleTitle(article.getArticleTitle());
-                articleOld.setArticleText(article.getArticleText());
-                articleOld.setArticleClass(article.getArticleClass());
-                articleOld.setArticleCommend(article.getArticleCommend());
-                articleOld.setArticleStatus(article.getArticleStatus());
-                articleOld.setArticleDescribe(article.getArticleDescribe());
-                //组装admin
-//                admin = adminDao.findByAdminName(article.getAdmin().getAdminName());
-//                article.setAdmin(admin);
-//                System.out.println(article);
-                articleDao.save(articleOld);
-                return "<script>alert('操作成功！')</script>";
-            case 3:
-                //删除
-                if (article.getId() == null){
-                    return "<script>alert('删除需要传入删除的文章id！')</script>";
-                }
-                Article delectArticle = articleDao.findOne(article.getId());
-//                delectArticle.setStatus();
-                articleDao.save(delectArticle);
-                return "<script>alert('操作成功！')</script>";
-        }
-        return "redirect:error.html";
+    public AdminController() {
+        errorRequst.put("code", valueOf(UNKNOWN_ERROR.getCode()));
+        errorRequst.put("msg",UNKNOWN_ERROR.getMsg());
     }
 
 
-    @RequestMapping("/articlelist")
-    public String getArticleList(@RequestParam(value = "page", defaultValue = "1") Integer page){
-        PageRequest pageRequest = new PageRequest(page-1,10);
-        Page<Article> pages = articleDao.findAll(pageRequest);
-        List<Article> articleList = pages.getContent();
-
-
-        /* 创建消息对象 */
-        MsgVo<ArticleListVo> msg = new MsgVo<ArticleListVo>();
-
-        msg.setApiCode(0);
-
-        msg.setApiMessage("ok");
-
-
-
-        /* 创建msg.data对象 */
-        ArticleListVo articleListVo = new ArticleListVo();
-
-
-        JSONArray articleListVos = new JSONArray();
-
-        for (Article article : articleList){
-
-            ArticleVo articleVo = new ArticleVo();
-
-            articleVo.setId(article.getId());
-//            articleVo.setClazz(article.getArticleClass().getClassName());
-//            articleVo.setCommend(article.getArticleCommend());
-//            articleVo.setDescribe(article.getArticleDescribe());
-//            articleVo.setStatus(article.getStatus().getValue());
-//            articleVo.setText(article.getArticleText());
-//            articleVo.setTime(article.getArticleTime());
-            articleVo.setTitle(article.getArticleTitle());
-
-            System.out.println(articleVo);
-            articleListVos.add(JSONObject.fromObject(articleVo));
+    @RequestMapping("/admin_add.do")
+    public String addAdmin(String name, String password, String email, HttpServletRequest request){
+        String ip;
+        try {
+            ip = NetworkUtil.getIpAddress(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ip = "未知";
         }
+        log.info("【添加管理员】 /admin/admin_add.do  name={}, password={}, email={}, ip={}", name, password, email, ip);
 
-
-        articleListVo.setArticles(JSONArray.fromObject(articleListVos));
-        System.gc();
-
-        msg.setData(articleListVo);
-
-        JSONObject json = new JSONObject();
-        json = JSONObject.fromObject(msg);
-        System.out.println("=======>");
-        System.out.println(json);
-        return json.toString();
+        try {
+            Admin admin = new Admin();
+            admin.setAdminName(name);
+            admin.setAdminPassword(password);
+            admin.setAdminEmail(email);
+            return gson.toJson(adminService.addAdmin(admin, ip));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return gson.toJson(errorRequst);
     }
 
 
-    @RequestMapping("/get_article")
-    public String getArticle(Integer id){
-        Article article = articleDao.findOne(id);
-        return JSONObject.fromObject(article).toString();
+    @RequestMapping("/admin_updatepassword.do")
+    public String updatePassword(String old_password, String new_password, String next_password, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
+        //判断两次密码是否为空
+        if (old_password == null || new_password == null || next_password == null){
+            errorRequst.replace("code", ResultErrorStatus.ADMIN_INPUTPASSWORDMUSTNOTNULL.getCode());
+            errorRequst.replace("msg", ResultErrorStatus.ADMIN_INPUTPASSWORDMUSTNOTNULL.getMsg());
+            return gson.toJson(errorRequst);
+        }
+        //判断两次密码是否相同
+        if(!new_password.equals(next_password)){
+            errorRequst.replace("code", ResultErrorStatus.ADMIN_TWOINPUTPASSWORDNOTEQUAL.getCode());
+            errorRequst.replace("msg", ResultErrorStatus.ADMIN_TWOINPUTPASSWORDNOTEQUAL.getMsg());
+            return gson.toJson(errorRequst);
+        }
+
+        Cookie[] cookies = request.getCookies();
+        System.out.println(cookies);
+        String adminName = RequestUtil.getCookie(cookies, "admin_name");
+        //如果无法获取adminName，重定向到登录页
+        if (adminName == null){
+            return "redirect:/login.html";
+        }
+        return gson.toJson(adminService.updateAdminPassword(adminName,old_password, new_password, NetworkUtil.getIpAddress(request)));
+
+    }
+
+
+    @RequestMapping("/admin_list.json")
+    public String adminList(@RequestParam(name = "admin_name", required = false, defaultValue = "") String admin_name, @RequestParam(value = "page", defaultValue = "1") Integer page, HttpServletRequest request){
+        errorRequst = ResultSuccessStatus.getResultSuccessMap();
+        try {
+            errorRequst.put("data",
+                    adminService.findAdminByAdminNameLike(admin_name+"%",
+                            new PageRequest(page-1,10)));
+
+        }catch (Exception e){
+            errorRequst.put("code", ResultErrorStatus.UNKNOWN_ERROR.getCode());
+            errorRequst.put("msg", ResultErrorStatus.UNKNOWN_ERROR.getMsg());
+        }
+        return gson.toJson(errorRequst);
     }
 
 

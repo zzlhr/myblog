@@ -6,6 +6,7 @@ package com.zzlhr.enums;
  */
 public enum ResultErrorStatus {
 
+
     UNKNOWN_ERROR(10000, "未知错误"),
 
 
@@ -13,6 +14,8 @@ public enum ResultErrorStatus {
     ADMIN_NOTEXIST(11000, "管理员不存在"),
     ADMIN_PASSWORD_ERROR(10001, "密码错误！"),
     ADMIN_ISEXIST(10002, "用户名或邮箱被占用！"),
+    ADMIN_TWOINPUTPASSWORDNOTEQUAL(10003, "两次输入密码不相同！"),
+    ADMIN_INPUTPASSWORDMUSTNOTNULL(10004, "输入密码不能为空！"),
     ;
 
 
@@ -29,9 +32,10 @@ public enum ResultErrorStatus {
         return code;
     }
 
-    private ResultErrorStatus(int code, String msg) {
+    ResultErrorStatus(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
+
 
 }
