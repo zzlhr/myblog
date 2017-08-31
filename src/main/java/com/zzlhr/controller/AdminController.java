@@ -46,6 +46,12 @@ public class AdminController {
     }
 
 
+
+    @RequestMapping("/login")
+    public String login(String admin, String password, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
+        return gson.toJson(adminService.login(admin, password, NetworkUtil.getIpAddress(request)));
+    }
+
     @RequestMapping("/admin_add.do")
     public String addAdmin(String name, String password, String email, HttpServletRequest request){
         String ip;
@@ -115,6 +121,26 @@ public class AdminController {
     }
 
 
+    /**
+     * 查看管理员详情
+     * @param id       管理员id
+     * @return
+     * {
+     *     msg: "操作成功！",
+     *     code: 0,
+     *     data: {
+     *        id: 10003,
+     *        adminName: "test",
+     *        adminEmail: "test@qq.com",
+     *        adminIp: "175.188.159.139",
+     *        adminAddress: "河南省-郑州市"
+     *
+     * }
+     */
+    @RequestMapping("/admin_details")
+    public String adminDetails(Integer id){
+        return gson.toJson(adminService.findAdminById(id));
+    }
 
 
 
