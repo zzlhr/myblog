@@ -20,7 +20,7 @@
             </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/sell/info.%d.log</fileNamePattern>
+            <fileNamePattern>log/blog/info.%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
@@ -34,7 +34,7 @@
             </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/sell/error.%d.log</fileNamePattern>
+            <fileNamePattern>log/blog/error.%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
