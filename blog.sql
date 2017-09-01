@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.18)
 # Database: blog
-# Generation Time: 2017-08-20 08:13:24 +0000
+# Generation Time: 2017-09-01 16:36:04 +0000
 # ************************************************************
 
 
@@ -30,12 +30,13 @@ CREATE TABLE `admin` (
   `admin_name` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '管理员名称',
   `admin_email` varchar(100) NOT NULL DEFAULT '' COMMENT '管理员邮箱',
   `admin_password` varchar(128) NOT NULL DEFAULT 'admin' COMMENT '管理员密码',
-  `admin_token` varchar(32) DEFAULT '' COMMENT '管理员令牌',
-  `admin_status` int(3) DEFAULT '0' COMMENT '0为启用，1为禁用，2为异常',
-  `admin_ip` varchar(15) DEFAULT '0.0.0.0' COMMENT '登录ip',
-  `admin_address` varchar(100) DEFAULT NULL COMMENT 'IP地址',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `admin_token` varchar(32) NOT NULL DEFAULT '' COMMENT '管理员令牌',
+  `admin_status` int(3) NOT NULL DEFAULT '0' COMMENT '0为启用，1为禁用，2为异常',
+  `admin_ip` varchar(15) NOT NULL DEFAULT '0.0.0.0' COMMENT '登录ip',
+  `admin_address` varchar(100) NOT NULL DEFAULT '' COMMENT 'IP地址',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `admin_group` int(11) DEFAULT '0' COMMENT '所在权限组',
   PRIMARY KEY (`id`),
   UNIQUE KEY `onlyname` (`admin_name`),
   KEY `admin_email` (`admin_email`)
@@ -44,9 +45,25 @@ CREATE TABLE `admin` (
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
 
-INSERT INTO `admin` (`id`, `admin_name`, `admin_email`, `admin_password`, `admin_token`, `admin_status`, `admin_ip`, `admin_address`, `create_time`, `update_time`)
+INSERT INTO `admin` (`id`, `admin_name`, `admin_email`, `admin_password`, `admin_token`, `admin_status`, `admin_ip`, `admin_address`, `create_time`, `update_time`, `admin_group`)
 VALUES
-	(10000,'heibai','2388399752@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','GVr4Q/M6ye8eUqmEC7j9lw==',0,'175.188.159.139','河南省-郑州市','2017-07-26 23:45:17','2017-08-18 16:23:38');
+	(10000,'heibai','2388399752@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','GP9tteIN9laTIx7NS0BgOw==',0,'0:0:0:0:0:0:0:1','未知','2017-07-26 23:45:17','2017-09-02 00:31:11',0),
+	(10001,'lhr','12348324324@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'175.188.159.139','河南省-郑州市','2017-08-23 16:37:05','2017-09-01 15:20:17',0),
+	(10002,'zzlhr','1062536903@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'0.0.0.0','','2017-08-23 16:40:31','2017-09-01 15:20:20',0),
+	(10003,'test','test@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'175.188.159.139','河南省-郑州市','2017-08-25 17:10:41','2017-09-01 15:20:21',0),
+	(10004,'test_lhr','test_lhr@qq.com','wzNncBURtPYCDsYd7TUgWQ==','',0,'175.188.159.139','河南省-郑州市','2017-08-25 17:13:15','2017-09-01 15:20:21',0),
+	(10005,'test_lhr1','test_lhr1@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'175.188.159.139','河南省-郑州市','2017-08-25 17:14:25','2017-09-01 15:20:22',0),
+	(10006,'test_lhr2','test_lhr2@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'','未知','2017-08-25 17:51:59','2017-09-01 15:20:22',0),
+	(10007,'test_lhr22','test_lhr22@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'','未知','2017-08-25 17:53:01','2017-09-01 15:20:23',0),
+	(10008,'test_lhr21','test_lhr21@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','',0,'','未知','2017-08-25 18:01:35','2017-09-01 15:20:24',0),
+	(10009,'test_lhr23','test_lhr23@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:25',0),
+	(10010,'test_lhr24','test_lhr24@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:25',0),
+	(10012,'test_lhr25','test_lhr25@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:26',0),
+	(10013,'test_lhr26','test_lhr26@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:27',0),
+	(10014,'admin','2388399752@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','J8Rzkf/wXa1R+Bl2cIAb1A==',0,'0:0:0:0:0:0:0:1','未知','2017-08-30 16:59:31','2017-09-01 15:20:41',1),
+	(10016,'test_lhr27','test_lhr27@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:28',0),
+	(10017,'test_lhr28','test_lhr28@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:28',0),
+	(10018,'test_lhr29','test_lhr29@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:43',0);
 
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -60,18 +77,47 @@ DROP TABLE IF EXISTS `admin_group`;
 CREATE TABLE `admin_group` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `group_name` varchar(11) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '权限组',
-  `group_value` int(11) NOT NULL COMMENT '权限值',
+  `group_status` int(1) DEFAULT NULL COMMENT '权限组状态,0为启用，1为禁用',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 LOCK TABLES `admin_group` WRITE;
 /*!40000 ALTER TABLE `admin_group` DISABLE KEYS */;
 
-INSERT INTO `admin_group` (`id`, `group_name`, `group_value`)
+INSERT INTO `admin_group` (`id`, `group_name`, `group_status`, `create_time`, `update_time`)
 VALUES
-	(1,X'E8B685E7BAA7E7AEA1E79086E59198',7);
+	(1,X'E8B685E7BAA7E7AEA1E79086E59198',0,'2017-09-01 23:22:51','2017-09-01 23:23:07'),
+	(2,X'74657374',1,'2017-09-02 00:08:31','2017-09-02 00:08:31');
 
 /*!40000 ALTER TABLE `admin_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table admin_groupinfo
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `admin_groupinfo`;
+
+CREATE TABLE `admin_groupinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL DEFAULT '0' COMMENT '权限组id',
+  `menu_id` int(11) NOT NULL DEFAULT '0' COMMENT '菜单id',
+  `group_value` int(11) NOT NULL DEFAULT '0' COMMENT '权限值',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+LOCK TABLES `admin_groupinfo` WRITE;
+/*!40000 ALTER TABLE `admin_groupinfo` DISABLE KEYS */;
+
+INSERT INTO `admin_groupinfo` (`id`, `group_id`, `menu_id`, `group_value`, `create_time`, `update_time`)
+VALUES
+	(1,1,1,15,'2017-09-01 23:21:15','2017-09-01 23:21:52');
+
+/*!40000 ALTER TABLE `admin_groupinfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -89,7 +135,7 @@ CREATE TABLE `article` (
   `article_picture` varchar(255) DEFAULT 'article.png' COMMENT '文章图片地址',
   `article_keyword` varchar(1000) DEFAULT '' COMMENT '文章关键字',
   `article_describe` varchar(255) DEFAULT '该作者很懒，未填写描述' COMMENT '文章描述',
-  `article_click` int(11) DEFAULT '0' COMMENT '点击量',
+  `article_click` int(11) unsigned DEFAULT '0' COMMENT '点击量',
   `article_praise` int(11) DEFAULT '0' COMMENT '点赞数',
   `article_class` varchar(20) DEFAULT '未分类' COMMENT '文章分类',
   `article_commend` int(2) DEFAULT NULL COMMENT '是否推荐：0.不推荐，1.推荐到首页，2为推荐到右侧列表',
@@ -159,7 +205,7 @@ CREATE TABLE `article_comment` (
   `comment_email` varchar(255) DEFAULT '' COMMENT '评论者邮箱',
   `comment_name` varchar(50) DEFAULT '匿名' COMMENT '评论人',
   `comment_text` text COMMENT '评论消息',
-  `comment_ip` varchar(15) DEFAULT NULL COMMENT 'ip',
+  `comment_ip` varchar(15) DEFAULT '' COMMENT 'ip',
   `comment_status` int(2) DEFAULT '0' COMMENT '0为启用，1为删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布评论时间',
   PRIMARY KEY (`id`)
@@ -235,11 +281,11 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(3) DEFAULT '1' COMMENT '1为异常，2为添加，3位修改，4位查询，5位删除，6为管理员登录',
-  `value` varchar(255) DEFAULT NULL COMMENT '操作内容',
+  `value` varchar(255) DEFAULT '' COMMENT '操作内容',
   `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
-  `ip` varchar(20) DEFAULT NULL COMMENT '操作ip',
-  `address` varchar(100) DEFAULT NULL COMMENT 'ip地址',
-  `admin` varchar(20) DEFAULT NULL COMMENT '操作管理员',
+  `ip` varchar(20) DEFAULT '' COMMENT '操作ip',
+  `address` varchar(100) DEFAULT '' COMMENT 'ip地址',
+  `admin` varchar(20) DEFAULT '' COMMENT '操作管理员',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -297,17 +343,23 @@ CREATE TABLE `menu_do` (
   `menu_fid` int(11) NOT NULL DEFAULT '0' COMMENT '菜单父级',
   `menu_uri` varchar(500) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '菜单地址',
   `do_uri` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '操作接口',
+  `do_serial` int(3) DEFAULT '0' COMMENT '排序',
+  `menu_status` int(1) NOT NULL DEFAULT '0' COMMENT '0启用，1禁用',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 LOCK TABLES `menu_do` WRITE;
 /*!40000 ALTER TABLE `menu_do` DISABLE KEYS */;
 
-INSERT INTO `menu_do` (`id`, `menu_name`, `menu_group`, `menu_fid`, `menu_uri`, `do_uri`)
+INSERT INTO `menu_do` (`id`, `menu_name`, `menu_group`, `menu_fid`, `menu_uri`, `do_uri`, `do_serial`, `menu_status`, `create_time`, `update_time`)
 VALUES
-	(1,X'E7AEA1E79086E59198E6938DE4BD9C',0,0,X'2F61646D696E2F',X'2F61646D696E2F'),
-	(2,X'E799BBE5BD95',1,1,X'2F61646D696E2F6C6F67696E2E68746D6C',X'2F61646D696E2F6C6F67696E'),
-	(3,X'E588A0E999A4E794A8E688B7',1,1,X'2F61646D696E2F64656C6574652D61646D696E2E68746D6C',X'2F61646D696E2F64656C6574652D61646D696E');
+	(1,X'E7AEA1E79086E59198E6938DE4BD9C',0,0,X'2F61646D696E2F',X'2F61646D696E2F',0,0,'2017-09-02 00:03:27','2017-09-02 00:03:46'),
+	(2,X'E799BBE5BD95',1,1,X'2F61646D696E2F6C6F67696E2E68746D6C',X'2F61646D696E2F6C6F67696E2E646F',0,0,'2017-09-02 00:03:27','2017-09-02 00:03:46'),
+	(3,X'E588A0E999A4E794A8E688B7',1,1,X'2F61646D696E2F61646D696E2D64656C6563742E68746D6C',X'2F61646D696E2F61646D696E2D64656C6574652E646F',2,0,'2017-09-02 00:03:27','2017-09-02 00:03:46'),
+	(4,X'E6B7BBE58AA0E7AEA1E79086E59198',1,1,X'2F61646D696E2F61646D696E2D6C6973742E68746D6C',X'2F61646D696E2F61646D696E2D6164642E646F',1,0,'2017-09-02 00:03:27','2017-09-02 00:03:46'),
+	(5,X'E4BFAEE694B9E7AEA1E79086E59198',1,1,X'2F61646D696E2F61646D696E2D7570646174652E68746D6C',X'2F61646D696E2F61646D696E2D7570646174652E646F',3,0,'2017-09-02 00:03:27','2017-09-02 00:03:46');
 
 /*!40000 ALTER TABLE `menu_do` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -324,9 +376,9 @@ CREATE TABLE `message` (
   `message_value` text COMMENT '留言内容',
   `message_fid` int(11) DEFAULT '0' COMMENT '回复留言id',
   `message_replaynum` int(11) DEFAULT '0' COMMENT '回复量',
-  `message_ip` varchar(15) DEFAULT NULL COMMENT 'ip',
-  `message_address` varchar(100) DEFAULT NULL COMMENT 'ip地址',
-  `message_link` varchar(200) DEFAULT NULL COMMENT '联系方式',
+  `message_ip` varchar(15) DEFAULT '' COMMENT 'ip',
+  `message_address` varchar(100) DEFAULT '' COMMENT 'ip地址',
+  `message_link` varchar(200) DEFAULT '' COMMENT '联系方式',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '留言时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -408,33 +460,15 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `status`;
 
 CREATE TABLE `status` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `value` varchar(20) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `classname` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `cs` int(11) DEFAULT NULL,
-  `classname` varchar(20) DEFAULT NULL,
-  `number` int(11) DEFAULT NULL,
   `fid` int(11) DEFAULT NULL,
+  `number` int(11) DEFAULT NULL,
+  `value` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-LOCK TABLES `status` WRITE;
-/*!40000 ALTER TABLE `status` DISABLE KEYS */;
-
-INSERT INTO `status` (`id`, `value`, `cs`, `classname`, `number`, `fid`)
-VALUES
-	(1,'文章分类',1,'文章分类',0,0),
-	(2,'文章状态',2,'文章状态',0,0),
-	(1000,'未分类',1,'文章分类',1,1),
-	(1001,'JavaScript',1,'文章分类',2,1),
-	(1002,'Linux',1,'文章分类',3,1),
-	(1003,'Java',1,'文章分类',4,1),
-	(1004,'开放',2,'文章状态',1,2),
-	(1005,'隐藏',2,'文章状态',2,2),
-	(1006,'删除',2,'文章状态',3,2),
-	(1007,NULL,NULL,NULL,NULL,NULL);
-
-/*!40000 ALTER TABLE `status` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table website
