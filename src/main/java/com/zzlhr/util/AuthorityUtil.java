@@ -12,7 +12,7 @@ public class AuthorityUtil {
      * @param menuDoId  对应位置（操作id）
      * @return          该位置的值
      */
-    private static Integer isHaveAuthority(Integer number, Integer menuDoId){
+    public static Integer isHaveAuthority(Integer number, Integer menuDoId){
 
         //无敌的与运算，直接出权限
         Integer result = (number >> (menuDoId+1)) & 1;

@@ -39,4 +39,7 @@ public class Admin implements Serializable{
 
   /** 登录地址 */
   private String adminAddress;
+
+  /** 所在权限组 */
+  private Integer adminGroup;
 }

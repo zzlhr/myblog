@@ -41,10 +41,10 @@ public class AdminServiceImpl implements AdminService {
 
         //查询管理员是否存在
         if ((admin = this.findAdmin(adminName)) == null){
-            result.put("code", String.valueOf(ExceptionEnum.ADMIN_NOTEXIST.getCode()));
-            result.put("msg", ExceptionEnum.ADMIN_NOTEXIST.getMessage());
+            result.put("code", String.valueOf(ResultErrorStatus.ADMIN_NOTEXIST.getCode()));
+            result.put("msg", ResultErrorStatus.ADMIN_NOTEXIST.getMsg());
             //不存在抛出异常
-            throw new BlogException(ExceptionEnum.ADMIN_NOTEXIST.getMessage());
+            throw new BlogException(ResultErrorStatus.ADMIN_NOTEXIST.getMsg());
         }
 
 
