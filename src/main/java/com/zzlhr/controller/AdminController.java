@@ -2,12 +2,14 @@ package com.zzlhr.controller;
 
 import com.google.gson.Gson;
 import com.zzlhr.entity.Admin;
+import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.util.NetworkUtil;
 import com.zzlhr.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,9 +51,18 @@ public class AdminController {
 
 
 
-    @RequestMapping("/login")
-    public String login(String admin, String password, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
-        return gson.toJson(adminService.login(admin, password, NetworkUtil.getIpAddress(request)));
+    @RequestMapping("/login.do")
+    public String login(String admin, String password, HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException {
+        JSONObject json = JSONObject.fromObject(adminService.login(admin, password, NetworkUtil.getIpAddress(request)));
+        if (json.getInt("code") == LoginEnum.SUCCESS.getCode()){
+            /*登录名*/
+            response.addCookie(new Cookie("admin", json.getString("admin")));
+            /*token*/
+            response.addCookie(new Cookie("token", json.getString("token")));
+            /*登录时间*/
+            response.addCookie(new Cookie("lt", String.valueOf(new Date().getTime())));
+        }
+        return gson.toJson(json);
     }
 
     @RequestMapping("/admin_add.do")
@@ -137,7 +150,7 @@ public class AdminController {
      *
      * }
      */
-    @RequestMapping("/admin_details")
+    @RequestMapping("/admin_details.do")
     public String adminDetails(Integer id){
         return gson.toJson(adminService.findAdminById(id));
     }

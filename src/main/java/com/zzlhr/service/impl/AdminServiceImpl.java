@@ -145,6 +145,7 @@ public class AdminServiceImpl implements AdminService {
         re.put("code",LoginEnum.SUCCESS.getCode());
         re.put("msg", LoginEnum.SUCCESS.getMsg());
         re.put("token", token);
+        re.put("admin",admin);
         return re;
     }
 
