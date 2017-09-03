@@ -58,6 +58,10 @@
         var admin = document.getElementById("adminname").value;
         var password = document.getElementById("password").value;
         login(admin,password,function (data) {
+            data = JSON.parse(data);
+            if (data.code == 0){
+                location.href = "index.html";
+            }
             console.log(data);
         });
 

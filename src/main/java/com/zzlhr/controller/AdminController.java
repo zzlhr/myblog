@@ -40,6 +40,9 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+
+
+
     Gson gson = new Gson();
 
     private Map<String, Object> errorRequst = new HashMap<>();
@@ -156,7 +159,10 @@ public class AdminController {
     }
 
 
+    @RequestMapping("/menulist.do")
+    public String menuList(HttpServletRequest request){
 
+    }
 
 
 }
