@@ -6,6 +6,8 @@ import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
 import com.zzlhr.service.AdminService;
+import com.zzlhr.service.MenuService;
+import com.zzlhr.util.CookieUtils;
 import com.zzlhr.util.NetworkUtil;
 import com.zzlhr.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,9 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+
+    @Autowired
+    private MenuService menuService;
 
 
 
@@ -122,7 +127,10 @@ public class AdminController {
 
 
     @RequestMapping("/admin_list.json")
-    public String adminList(@RequestParam(name = "admin_name", required = false, defaultValue = "") String admin_name, @RequestParam(value = "page", defaultValue = "1") Integer page, HttpServletRequest request){
+    public String adminList(
+            @RequestParam(name = "admin_name", required = false, defaultValue = "") String admin_name,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            HttpServletRequest request){
         errorRequst = ResultSuccessStatus.getResultSuccessMap();
         try {
             errorRequst.put("data",
@@ -161,7 +169,7 @@ public class AdminController {
 
     @RequestMapping("/menulist.do")
     public String menuList(HttpServletRequest request){
-
+       return gson.toJson(menuService.getMenuList(CookieUtils.getCookieValue(request, "admin")));
     }
 
 
