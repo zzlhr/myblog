@@ -16,4 +16,6 @@ public interface MenuDoDao extends JpaRepository<MenuDo, Integer>{
 
 
     List<MenuDo> findMenuDosById(List<Integer> id);
+
+
 }
