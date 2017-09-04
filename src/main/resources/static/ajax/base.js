@@ -20,5 +20,6 @@ function ajax(url, type, data,callback) {
 
 
 function baseurl() {
-    return "http://localhost:8080/"
+    return "http://localhost:8080"
 }
+
