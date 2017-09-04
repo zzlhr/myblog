@@ -13,9 +13,9 @@ public class AuthorityUtil {
      * @return          该位置的值
      */
     public static Integer isHaveAuthority(Integer number, Integer menuDoId){
-
+//        System.out.println(number + "----" + menuDoId);
         //无敌的与运算，直接出权限
-        Integer result = (number >> (menuDoId+1)) & 1;
+        Integer result = (number >> menuDoId) & 1;
         System.out.println(result);
         return result;
 
@@ -25,10 +25,6 @@ public class AuthorityUtil {
     public static void main(String[] args) {
         isHaveAuthority(1,1);
 
-//        System.out.println(UUID.randomUUID());
-//        System.out.println(UUID.randomUUID());
-//        System.out.println(UUID.randomUUID());
-//        System.out.println(UUID.randomUUID());
     }
 
 
