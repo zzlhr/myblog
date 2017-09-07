@@ -32,7 +32,8 @@ public class AdminServiceImplTest {
 
     @Test
     public void findAdmin() throws Exception {
-
+        Admin admin = adminService.findAdmin("");
+        System.out.println(admin);
     }
 
     @Test
