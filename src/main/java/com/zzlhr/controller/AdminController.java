@@ -2,6 +2,7 @@ package com.zzlhr.controller;
 
 import com.google.gson.Gson;
 import com.zzlhr.entity.Admin;
+import com.zzlhr.entity.MenuDo;
 import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
@@ -170,6 +171,13 @@ public class AdminController {
     @RequestMapping("/menulist.do")
     public String menuList(HttpServletRequest request){
        return gson.toJson(menuService.getMenuList(CookieUtils.getCookieValue(request, "admin")));
+    }
+
+
+    @RequestMapping("/menu_add.do")
+    public String menuAdd(MenuDo menu){
+        System.out.println(menu);
+        return gson.toJson(menu);
     }
 
 

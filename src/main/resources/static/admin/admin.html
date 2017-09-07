@@ -5,15 +5,15 @@
     <title>Title</title>
     <link rel="stylesheet" href="../layui/css/layui.css">
     <style>
-        .layui-form-label{
-            width: 100px;
-        }
+        /*.layui-form-label{*/
+            /*width: 90px;*/
+        /*}*/
     </style>
 </head>
 <body>
     <div class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">管理员名称：</label>
+            <label class="layui-form-label" style="width: 90px;">管理员名称：</label>
             <div class="layui-input-inline">
                 <input class="layui-input" id="select_name" type="text" name="title" placeholder="请输入管理员名称">
             </div>
@@ -49,12 +49,14 @@
     </div>
 
 </body>
-<script src="../js/jquery1.11.3.min.js"></script>
-<script src="../layui/layui.js"></script>
-<script src="../ajax/base.js"></script>
 <script src="../ajax/ajax_admin.js"></script>
 <script>
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
 
+//        layer.msg('hello');
+    });
 
     var selectname = '';
     var pageNumber = 1;
@@ -94,9 +96,61 @@
                     .replace("#{address}", data[i].adminAddress);
                 $('#tbody').append(tr);
             }
+            $(".updata_admin").on('click',function () {
+                var id = $(this).attr('id');
+                id = id.substr(1,id.length);
+                console.log(id);
 
+                //弹出修改
+                var type = 'auto'
+                    ,text =
+                    '<div class="layui-form">' +
+                    '  <div class="layui-form-item">\n' +
+                    '    <label class="layui-form-label" style="">序号：</label>\n' +
+                    '    <div class="layui-input-block">\n' +
+                    '      <input id="uid" type="text" name="title" lay-verify="title" autocomplete="off" disabled="" class="layui-input">\n' +
+                    '    </div>\n' +
+                    '  </div>' +
+                    '  <div class="layui-form-item">\n' +
+                    '    <label class="layui-form-label">名称：</label>\n' +
+                    '    <div class="layui-input-block">\n' +
+                    '      <input type="text" name="title" lay-verify="title" autocomplete="off" value="" class="layui-input">\n' +
+                    '    </div>\n' +
+                    '  </div>' +
+                    '  <div class="layui-form-item">\n' +
+                    '    <label class="layui-form-label">邮箱：</label>\n' +
+                    '    <div class="layui-input-block">\n' +
+                    '      <input type="text" name="title" lay-verify="title" autocomplete="off" value="" class="layui-input">\n' +
+                    '    </div>\n' +
+                    '  </div>' +
+                    '</div>';
+
+                layer.open({
+                    type: 1
+                    ,area: ['500px','700px'] //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                    ,offset: 1
+                    ,id: 'layerDemo'+type //防止重复弹出
+                    ,content: '<div style="margin: 20px;">'+ text +'</div>'
+                    ,btn: '修改'
+                    ,btnAlign: 'c' //按钮居中
+                    ,shade: 0 //不显示遮罩
+                    ,yes: function(){
+                        layer.closeAll();
+                    },success:function () {
+                        $('#uid').val(id);
+                        getadmindetails(id,function (data) {
+                            console.log(data);
+                        });
+                    }
+                });
+
+
+            })
             pageNumber++;
         })
+
+        //修改事件
+
 
     }
     getdata();
@@ -116,6 +170,8 @@
         $('#tbody').html('');
         getdata()
     })
+    
+
 
 </script>
 

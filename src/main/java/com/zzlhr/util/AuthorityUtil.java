@@ -24,7 +24,6 @@ public class AuthorityUtil {
 
     public static void main(String[] args) {
         isHaveAuthority(1,1);
-
     }
 
 

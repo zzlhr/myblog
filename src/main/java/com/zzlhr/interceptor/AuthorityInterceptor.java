@@ -30,6 +30,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         }
 
 
+
         return authorityService.isHaveAuthority(request.getRequestURI(),
                 CookieUtils.getCookieValue(request,"admin"),
                 CookieUtils.getCookieValue(request, "token"));

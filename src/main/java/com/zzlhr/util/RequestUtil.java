@@ -6,6 +6,8 @@ import javax.servlet.http.Cookie;
  * Created by 刘浩然 on 2017/7/27.
  */
 public class RequestUtil {
+
+    
     public static String getRemortIP(HttpServletRequest request) {
         if (request.getHeader("x-forwarded-for") == null) {
             return request.getRemoteAddr();

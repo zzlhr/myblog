@@ -10,3 +10,11 @@ function getadminlist(name,page,callback) {
         callback(data);
     });
 }
+
+function getadmindetails(id,callback) {
+    var url = "admin_details.do?id="+id;
+
+    ajax(url,0,function (data) {
+        callback(data);
+    });
+}

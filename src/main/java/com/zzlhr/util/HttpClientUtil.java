@@ -129,17 +129,7 @@ public class HttpClientUtil {
             // 获取所有响应头字段
             requestHeader = connection.getHeaderFields();
             // 遍历所有的响应头字段
-//            for (String key : requestHeader.keySet()) {
-//                System.out.println(key + "--->" + map.get(key));
-//                Transfer-Encoding--->[chunked]
-//                null--->[HTTP/1.1 200 OK]
-//                Server--->[Tengine]
-//                Connection--->[keep-alive]
-//                Vary--->[Accept-Encoding]
-//                Date--->[Thu, 17 Aug 2017 16:23:12 GMT]
-//                X-Powered-By--->[PHP/5.3.6]
-//                Content-Type--->[text/html]
-//            }
+
             // 定义 BufferedReader输入流来读取URL的响应
             in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));

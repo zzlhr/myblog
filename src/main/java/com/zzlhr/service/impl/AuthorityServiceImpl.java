@@ -192,7 +192,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             return false;
         }
         //查询父菜单 父菜单才是真正寸权限
-        menu = menuDoDao.findOne(menu.getMenuFid());
+        MenuDo fMenu = menuDoDao.findOne(menu.getMenuFid());
 
 
         //查询admin，确认admin
@@ -209,7 +209,10 @@ public class AuthorityServiceImpl implements AuthorityService {
         //验证权限
 
         //查询权限值
-        AdminGroupinfo groupValue =adminGroupinfoDao.findAdminGroupinfoByGroupIdAndMenuId(admin1.getAdminGroup(), menu.getId());
+        AdminGroupinfo groupValue = adminGroupinfoDao.findAdminGroupinfoByGroupIdAndMenuId(admin1.getAdminGroup(), fMenu.getId());
+
+//        System.out.println(groupValue);
+
 
         if (AuthorityUtil.isHaveAuthority(groupValue.getGroupValue(), menu.getDoSerial()) == 1){
             return true;
