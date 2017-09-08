@@ -56,4 +56,15 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getArticleDetails(int articleId) {
         return articleDao.findOne(articleId);
     }
+
+    @Override
+    public void addArticleClick(int id, String ip) {
+
+        Article article = articleDao.findOne(id);
+
+        article.setArticleClick(article.getArticleClick() + 1);
+
+        articleDao.save(article);
+
+    }
 }

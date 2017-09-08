@@ -1,0 +1,28 @@
+/*
+	div加灰色背景色
+ */
+.blog-div-bg-gray{
+	background-color: #ADADAD !important;
+}
+.blog-li-text15{
+	width: 200px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+.blog-article-li{
+	/*margin-bottom: 30px !important;*/
+	padding: 5px;
+	/*!*background: #eeeeee;*!*/
+	/*background: white;*/
+	/*padding: 5px;*/
+	/*box-shadow: 2px 2px 2px #888888;*/
+}
+
+.blog-article{
+	/* 文章div样式 */
+	background-color: white;
+	height: 720px;
+	width: 95%;
+	padding: 10px;
+}
