@@ -32,11 +32,11 @@ public class Article implements Serializable{
   /** 文章描述 */
   private String articleDescribe;
 
-  @Column(updatable = false, insertable = false)
+  @Column(insertable = false)
   /** 文章点击数 */
   private Integer articleClick;
 
-  @Column(updatable = false, insertable = false)
+  @Column(insertable = false)
   /** 文章点赞数 */
   private Integer articlePraise;
 

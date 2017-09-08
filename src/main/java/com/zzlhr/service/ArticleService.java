@@ -30,6 +30,7 @@ public interface ArticleService {
     /** 查询文章详情 */
     Article getArticleDetails(int articleId);
 
+    void addArticleClick(int id, String ip);
 
 
 

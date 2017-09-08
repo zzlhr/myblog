@@ -3,6 +3,8 @@ package com.zzlhr.controller;
 import com.google.gson.Gson;
 import com.zzlhr.entity.Article;
 import com.zzlhr.service.ArticleService;
+import com.zzlhr.util.JSONUtil;
+import com.zzlhr.util.NetworkUtil;
 import com.zzlhr.vo.ArticleListVo;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -12,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +27,6 @@ import java.util.List;
 public class PublicController {
 
     //前台
-
     @Autowired
     private ArticleService articleService;
 
@@ -54,29 +55,30 @@ public class PublicController {
     }
 
     @RequestMapping("/article.html")
-    public ModelAndView article(Integer id){
+    public ModelAndView article(Integer id, HttpServletRequest request){
 
 
         ModelAndView model = new ModelAndView("article");
 
+        //查询文章详情
         Article article = articleService.getArticleDetails(id);
 
+        //转化json
         JSONObject result = JSONObject.fromObject(article);
-        Date updateTime = new Date(result.getJSONObject("updateTime").getLong("time"));
-        Date createTime = new Date(result.getJSONObject("createTime").getLong("time"));
 
-        result.remove("updateTime");
-        result.remove("createTime");
+        //格式化时间
+        String[] keys = {"updateTime", "createTime"};
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        result.put("updateTime", formatter.format(updateTime));
-        result.put("createTime", formatter.format(createTime));
+        result = JSONUtil.formatDate(result, keys, "yyyy-MM-dd HH:mm:ss");
 
         model.addObject("article", result.toString());
 
-
-
+        //添加访问数量
+        try {
+            articleService.addArticleClick(id, NetworkUtil.getIpAddress(request));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return model;
     }
