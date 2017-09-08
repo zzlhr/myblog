@@ -30,7 +30,6 @@
                 <li><a href="articles.html?cs=js">js</a></li>
                 <li><a href="articles.html?cs=linux">Linux</a></li>
                 <li><a href="articles.html?cs=db">DB</a></li>
-                <li><a href="articles.html?cs=易语言">易语言</a></li>
               </ul>
             </li>
             <li>
@@ -106,13 +105,7 @@
 	                <div class="panel-heading">
 	                  <h3 class="panel-title">关于我</h3>
 	                </div>
-	                <div class="panel-body">
-	                  <p>姓名：刘浩然</p>
-	                  <p>性别：男</p>
-	                  <p>就职于：河南通信软件科技有限公司</p>
-	                  <p>爱好：一个人安安静静的敲代码（迫不得已）</p>
-	                  <p>座右铭：定一个大目标和一堆小目标，规划好自己的时间，一步一步向前走。</p>
-	                  <p>给一些刚入行或在迷茫的coder的寄语：不管大家因为什么选择coder这个职业，喜欢也好，有所图也好，前者需要的是不断努力；后者需要的是做好一件事的决心，然后成为前者。</p>
+	                <div class="panel-body blog-about">
 	                </div>
 	              </div>
 	              
@@ -121,25 +114,7 @@
 	                  <h3 class="panel-title">最新文章</h3>
 	                </div>
 	                <div class="panel-body">
-	                	<ul class="list-group">
-	                		<li class="list-group-item clearfix" style="padding: 5px;">
-	                			<a class="pull-left" herf="article.html">
-	                				<p class="blog-li-text15" style="margin: 0px;">不断学习，不断进步，挑战自己，超越自己</p>
-	                			</a>
-	                			<span class="pull-right">2017-5-21 17:31:00</span>
-	                		</li>
-	                		<li class="list-group-item clearfix" style="padding: 5px;">
-	                			<a class="pull-left" herf="article.html">
-	                				<p class="blog-li-text15" style="margin: 0px;">不断学习，不断进步，挑战自己，超越自己</p>
-	                			</a>
-	                			<span class="pull-right">2017-5-21 17:31:00</span>
-	                		</li>
-	                		<li class="list-group-item clearfix" style="padding: 5px;">
-	                			<a class="pull-left" herf="article.html">
-	                				<p class="blog-li-text15" style="margin: 0px;">不断学习，不断进步，挑战自己，超越自己</p>
-	                			</a>
-	                			<span class="pull-right">2017-5-21 17:31:00</span>
-	                		</li>
+	                	<ul class="list-group blog-commend-left">
 	                	</ul>
 	                </div>
 	              </div>
@@ -153,4 +128,17 @@
 </body>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
-</html>
+<script type="text/javascript" src="ajax/base.js"></script>
+<script>
+    function init() {
+
+        setAbout();
+
+        setNewArticle();
+    }
+
+    init();
+
+
+</script>
+

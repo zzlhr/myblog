@@ -30,7 +30,6 @@
 	                <li><a href="articles.html?cs=js">js</a></li>
 	                <li><a href="articles.html?cs=linux">Linux</a></li>
 	                <li><a href="articles.html?cs=db">DB</a></li>
-	                <li><a href="articles.html?cs=易语言">易语言</a></li>
 	              </ul>
 	            </li>
 	            <li>
