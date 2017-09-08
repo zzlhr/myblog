@@ -19,7 +19,7 @@ public class ArticleVo {
 
     private Integer commend;
 
-    private String status;
+//    private String status;
 
     private Date time;
 }

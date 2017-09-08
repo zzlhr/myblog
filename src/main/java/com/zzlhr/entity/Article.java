@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
@@ -18,6 +19,9 @@ public class Article implements Serializable{
 
   /** 文章内容 */
   private String articleText;
+
+  /** 文章管理员 */
+  private String articleAdmin;
 
   /** 文章图片地址 */
   private String articlePicture;
@@ -45,5 +49,10 @@ public class Article implements Serializable{
   /** 文章状态 0为显示，1为隐藏，3为删除 */
   private Integer articleStatus;
 
+  @Column(updatable = false, insertable = false)
+  private Date createTime;
+
+  @Column(updatable = false, insertable = false)
+  private Date updateTime;
 
 }
