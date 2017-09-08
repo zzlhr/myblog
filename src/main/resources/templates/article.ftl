@@ -58,7 +58,7 @@
 
 	<div class="container" style="margin-top: 10px;">
 		
-		<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+		<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 blog-article-div">
 			<!--
             	作者：lhr5533@126.com
             	时间：2017-05-26
@@ -90,7 +90,7 @@
 	                <div class="panel-heading">
 	                  <h3 class="panel-title">关于我</h3>
 	                </div>
-	                <div class="panel-body">
+	                <div class="panel-body blog-about">
 	                  <p>姓名：刘浩然</p>
 	                  <p>性别：男</p>
 	                  <p>就职于：河南通信软件科技有限公司</p>
@@ -137,6 +137,7 @@
 </body>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="ajax/base.js"></script>
 <script>
 	var article = ${article};
 	
@@ -152,10 +153,11 @@
 
         $('#article-text').html(article.articleText);
 
-		article
+        setAbout();
     }
 
 
+    
     init();
 
 

@@ -86,7 +86,7 @@
 	                <div class="panel-heading">
 	                  <h3 class="panel-title">关于我</h3>
 	                </div>
-	                <div class="panel-body">
+	                <div class="panel-body blog-about">
 	                  <p>姓名：刘浩然</p>
 	                  <p>性别：男</p>
 	                  <p>就职于：河南砼鑫软件科技有限公司</p>
@@ -131,6 +131,7 @@
 </body>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="ajax/base.js"></script>
 <script>
 
 	var articles = ${articles?string};
@@ -149,7 +150,7 @@
 			var article = articles[i];
             tmodel += model.replace('(title)', article.articleTitle)
 					.replace('(admin)', article.articleAdmin)
-					.replace('(time)', new Date(parseInt(article.updateTime)).format('yyyy-MM-dd h:m:s'))
+					.replace('(time)', article.updateTime)
 					.replace('(click)',article.articleClick)
 					.replace('(praise)', article.articlePraise)
 					.replace('(describe)', article.articleDescribe)
@@ -158,29 +159,11 @@
 		}
 //		console.log(tmodel);
         $('#articlelist').html(tmodel);
+
+
+        setAbout();
     }
 
-    Date.prototype.format = function(format) {
-        var date = {
-            "M+": this.getMonth() + 1,
-            "d+": this.getDate(),
-            "h+": this.getHours(),
-            "m+": this.getMinutes(),
-            "s+": this.getSeconds(),
-            "q+": Math.floor((this.getMonth() + 3) / 3),
-            "S+": this.getMilliseconds()
-        };
-        if (/(y+)/i.test(format)) {
-            format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
-        }
-        for (var k in date) {
-            if (new RegExp("(" + k + ")").test(format)) {
-                format = format.replace(RegExp.$1, RegExp.$1.length == 1
-                        ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
-            }
-        }
-        return format;
-    }
     init();
 
 </script>

@@ -1,5 +1,6 @@
 package com.zzlhr.util;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +45,25 @@ public class JSONUtil {
 
         return srcJson;
     }
+    /**
+     * 格式化jsonArray对象中的时间对象
+     * @param srcJson   json源
+     * @param keys      时间格式的key值数组
+     * @param format    格式 如：yyyy-MM-dd HH:mm:ss
+     * @return          新的json对象
+     */
+    public static JSONArray formatDate(JSONArray srcJson, String[] keys, String format){
 
+        for (int i = 0; i < srcJson.size(); i++){
+            try {
+                srcJson.set(i, formatDate(srcJson.getJSONObject(i), keys, format));
+            } catch (Exception e){
+                srcJson.set(i, formatDate(srcJson.getJSONArray(i), keys, format));
+            }
+        }
+
+        return srcJson;
+    }
 
 
 

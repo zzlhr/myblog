@@ -1,7 +1,7 @@
 package com.zzlhr.controller;
 
-import com.google.gson.Gson;
 import com.zzlhr.entity.Article;
+import com.zzlhr.service.AboutService;
 import com.zzlhr.service.ArticleService;
 import com.zzlhr.util.JSONUtil;
 import com.zzlhr.util.NetworkUtil;
@@ -10,8 +10,11 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,22 +33,26 @@ public class PublicController {
     @Autowired
     private ArticleService articleService;
 
-    Gson gson = new Gson();
+    @Autowired
+    private AboutService aboutService;
+
 
     @RequestMapping({"/","/index.*"})
     public ModelAndView index(){
 
         List<Article> comments = articleService.getCommendArticle(1,0);
         List<ArticleListVo> result = new ArrayList<>();
+
         for (Article comment : comments){
             ArticleListVo articleListVo = new ArticleListVo();
             BeanUtils.copyProperties(comment, articleListVo);
-            articleListVo.setCreateTime(String.valueOf(comment.getCreateTime().getTime()));
-            articleListVo.setUpdateTime(String.valueOf(comment.getUpdateTime().getTime()));
             result.add(articleListVo);
         }
 
-        String articles = JSONArray.fromObject(result).toString();
+
+        String articles = JSONUtil.formatDate(JSONArray.fromObject(result),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString();
 
         ModelAndView model = new ModelAndView("index");
 
@@ -81,6 +88,39 @@ public class PublicController {
         }
 
         return model;
+    }
+
+
+    @RequestMapping("/articles.html")
+    public ModelAndView articles(String cs, @RequestParam(value = "page", defaultValue = "0") Integer page){
+        Page<Article> articlePage = articleService.getArticleToClass(cs, page);
+        List<Article> list = articlePage.getContent();
+        List<ArticleListVo> result = new ArrayList<>();
+
+        for (Article article : list){
+            ArticleListVo articleListVo = new ArticleListVo();
+            BeanUtils.copyProperties(article, articleListVo);
+            result.add(articleListVo);
+        }
+
+        String articles = JSONUtil.formatDate(JSONArray.fromObject(result),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString();
+
+        ModelAndView model = new ModelAndView("articles");
+
+        model.addObject("articles", articles);
+
+        return model;
+    }
+
+
+
+
+    @ResponseBody
+    @RequestMapping("/about.json")
+    public String getAbout(){
+        return String.valueOf(JSONObject.fromObject(aboutService.getAbout()));
     }
 
 

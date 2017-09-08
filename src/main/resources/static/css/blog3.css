@@ -25,4 +25,8 @@
 	height: 720px;
 	width: 95%;
 	padding: 10px;
+	overflow: auto;
+}
+.blog-article-div{
+	margin-top: 20px;
 }

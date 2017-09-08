@@ -2,6 +2,8 @@ package com.zzlhr.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * Created by 刘浩然 on 2017/8/4.
  */
@@ -44,9 +46,9 @@ public class ArticleListVo extends ArticleVo {
 //    private Integer articleStatus;
 
 
-    private String updateTime;
+    private Date updateTime;
 
-    private String createTime;
+    private Date createTime;
 
 
 

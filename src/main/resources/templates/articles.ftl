@@ -73,33 +73,9 @@
 	            	时间：2017-05-20
 	            	描述：文章列表
 	            -->
-	            <div class="raw">
+	            <div id="articlelist" class="raw">
 	            	<!-- 文章列表 -->
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<a href="#"><h4>三月，醉一场青春的流年</h4></a>
-						<p><small>作者：芹菜&nbsp;|&nbsp;发布时间：2017-05-20 17:24:49&nbsp;</small><small class="hidden-xs hidden-sm">|&nbsp;点击数：999&nbsp;|&nbsp;评论数：999&nbsp;|&nbsp;赞：999</small></p>
-						<p><b>摘要:</b><span>&nbsp;三月，醉一场青春的流年。慢步在三月的春光里，走走停停，看花开嫣然，看春雨绵绵，感受春风拂面，春天，就是青春的流年。青春，是人生中最美的风景。青春，是一场花开的遇见；青春，是一场痛并快乐着的旅行；青春，是一场轰轰烈烈的比赛；青春，是一场鲜衣奴马的争荣岁月；青春，是一场风花雪月的光阴。</span></p>
-						<div class="visible-xs pull-right"><button class="btn btn-sm btn-success">查看详情</button></div>
-					</div>
-						
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<a href="#"><h4>三月，醉一场青春的流年</h4></a>
-						<p><small>作者：芹菜&nbsp;|&nbsp;发布时间：2017-05-20 17:24:49&nbsp;</small><small class="hidden-xs hidden-sm">|&nbsp;点击数：999&nbsp;|&nbsp;评论数：999&nbsp;|&nbsp;赞：999</small></p>
-						<p><b>摘要:</b><span>&nbsp;三月，醉一场青春的流年。慢步在三月的春光里，走走停停，看花开嫣然，看春雨绵绵，感受春风拂面，春天，就是青春的流年。青春，是人生中最美的风景。青春，是一场花开的遇见；青春，是一场痛并快乐着的旅行；青春，是一场轰轰烈烈的比赛；青春，是一场鲜衣奴马的争荣岁月；青春，是一场风花雪月的光阴。</span></p>
-						<div class="visible-xs pull-right"><button class="btn btn-sm btn-success">查看详情</button></div>
-					</div>
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<a href="#"><h4>三月，醉一场青春的流年</h4></a>
-						<p><small>作者：芹菜&nbsp;|&nbsp;发布时间：2017-05-20 17:24:49&nbsp;</small><small class="hidden-xs hidden-sm">|&nbsp;点击数：999&nbsp;|&nbsp;评论数：999&nbsp;|&nbsp;赞：999</small></p>
-						<p><b>摘要:</b><span>&nbsp;三月，醉一场青春的流年。慢步在三月的春光里，走走停停，看花开嫣然，看春雨绵绵，感受春风拂面，春天，就是青春的流年。青春，是人生中最美的风景。青春，是一场花开的遇见；青春，是一场痛并快乐着的旅行；青春，是一场轰轰烈烈的比赛；青春，是一场鲜衣奴马的争荣岁月；青春，是一场风花雪月的光阴。</span></p>
-						<div class="visible-xs pull-right"><button class="btn btn-sm btn-success">查看详情</button></div>
-					</div>
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<a href="#"><h4>三月，醉一场青春的流年</h4></a>
-						<p><small>作者：芹菜&nbsp;|&nbsp;发布时间：2017-05-20 17:24:49&nbsp;</small><small class="hidden-xs hidden-sm">|&nbsp;点击数：999&nbsp;|&nbsp;评论数：999&nbsp;|&nbsp;赞：999</small></p>
-						<p><b>摘要:</b><span>&nbsp;三月，醉一场青春的流年。慢步在三月的春光里，走走停停，看花开嫣然，看春雨绵绵，感受春风拂面，春天，就是青春的流年。青春，是人生中最美的风景。青春，是一场花开的遇见；青春，是一场痛并快乐着的旅行；青春，是一场轰轰烈烈的比赛；青春，是一场鲜衣奴马的争荣岁月；青春，是一场风花雪月的光阴。</span></p>
-						<div class="visible-xs pull-right"><button class="btn btn-sm btn-success">查看详情</button></div>
-					</div>
+
 				</div>
 			
 			</div>
@@ -115,7 +91,7 @@
 		                <div class="panel-heading">
 		                  <h3 class="panel-title">关于我</h3>
 		                </div>
-		                <div class="panel-body">
+		                <div class="panel-body blog-about">
 		                  <p>姓名：刘浩然</p>
 		                  <p>性别：男</p>
 		                  <p>就职于：河南通信软件科技有限公司</p>
@@ -158,4 +134,38 @@
 	</body>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="ajax/base.js"></script>
+<script>
+
+	var articles = ${articles};
+    function init() {
+        var model = '<div class="clearfix panel panel-default blog-article-li" style="margin-bottom: 30px;">' +
+                '<a href="(href)"><h4>(title)</h4></a>' +
+                '<p><small>作者：(admin)&nbsp;|&nbsp;发布时间：(time)&nbsp;</small><small class="hidden-xs hidden-sm">|&nbsp;点击数：(click)&nbsp;|&nbsp;赞：(praise)</small></p>' +
+                '<p><b>摘要:</b>&nbsp;(describe)</p>' +
+                '<div class="visible-xs pull-right"><a href="(href)" class="btn btn-sm btn-success">查看详情</a></div>' +
+                '</div>'
+
+//	    articles = JSON.parse(articles);
+        var tmodel = "";
+        for (var i=0;i<articles.length;i++){
+            var article = articles[i];
+            tmodel += model.replace('(title)', article.articleTitle)
+                    .replace('(admin)', article.articleAdmin)
+                    .replace('(time)', article.updateTime)
+                    .replace('(click)',article.articleClick)
+                    .replace('(praise)', article.articlePraise)
+                    .replace('(describe)', article.articleDescribe)
+                    .replace('(href)', 'article.html?id=' + article.id)
+                    .replace('(href)', 'article.html?id=' + article.id);
+        }
+//		console.log(tmodel);
+        $('#articlelist').html(tmodel);
+
+        setAbout();
+    }
+
+    init();
+
+</script>
 </html>
