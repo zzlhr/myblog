@@ -19,7 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -123,6 +125,41 @@ public class PublicController {
         return String.valueOf(JSONObject.fromObject(aboutService.getAbout()));
     }
 
+
+
+    @ResponseBody
+    @RequestMapping("/articles.json")
+    public String articles(){
+        JSONArray array = JSONArray.fromObject(articleService.getCommendArticle(2,0));
+        JSONObject json = new JSONObject();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        int i = 0;
+        for (Object ar : array){
+            JSONObject jsonar = JSONObject.fromObject(ar);
+            json.put("title",jsonar.getString("articleTitle"));
+            json.put("time", formatter.format(new Date(jsonar.getJSONObject("createTime").getLong("time"))));
+            json.put("id", jsonar.getInt("id"));
+            array.set(i, json);
+            i++;
+        }
+
+        return String.valueOf(array);
+    }
+
+
+    @RequestMapping("/about.html")
+    public String about(){
+        return "about";
+    }
+
+    @RequestMapping("/message.html")
+    public String message(){
+        return "message";
+    }
+    @RequestMapping("/works.html")
+    public String works(){
+        return "works";
+    }
 
 
 }
