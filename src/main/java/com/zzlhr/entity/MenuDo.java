@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Entity
 public class MenuDo implements Serializable{
 
-
   @Id
   @GeneratedValue
   private Integer id;
