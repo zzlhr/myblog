@@ -30,3 +30,9 @@
 .blog-article-div{
 	margin-top: 20px;
 }
+
+.blog-message{
+	padding: 5px;
+	margin: 5px;
+	background-color: white;
+}
