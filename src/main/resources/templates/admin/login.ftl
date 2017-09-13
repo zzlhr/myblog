@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+</head>
+
+<style>
+    .blog-login-div{
+        width: 40%;
+        margin: auto
+    }
+    .layui-input-block{
+        margin-right: 10%;
+    }
+</style>
+<body>
+<div style="margin-top: 100px">
+
+    <div class="layui-form blog-login-div">
+        <blockquote class="layui-elem-quote">管理员登陆</blockquote>
+
+        <div class="layui-form-item" style="margin-top: 50px">
+            <label class="layui-form-label">用户名：</label>
+            <div class="layui-input-block">
+                <input id="adminname" class="layui-input" placeholder="用户名/E-Mail"/>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码：</label>
+            <div class="layui-input-block">
+                <input id="password" class="layui-input" placeholder="请输入密码" type="password"/>
+            </div>
+        </div>
+
+        <div style="margin-top: 50px">
+            <button onclick="form_login()" class="layui-btn layui-btn-big layui-btn-normal" style="width: 80%; margin-left: 10%; margin-right: 10%">登录</button>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+<script src="../layui/layui.all.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../ajax/base.js"></script>
+<script src="../ajax/ajax_login.js"></script>
+
+
+
+<script>
+
+
+    function form_login() {
+        var admin = document.getElementById("adminname").value;
+        var password = document.getElementById("password").value;
+        login(admin,password,function (data) {
+            data = JSON.parse(data);
+            if (data.code == 0){
+                location.href = "index.html";
+            }
+            console.log(data);
+        });
+
+    }
+</script>
+
+
+</html>
