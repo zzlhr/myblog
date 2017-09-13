@@ -47,8 +47,8 @@
 				<li class="form-group" style="margin-bottom: 0px;">
 					<input type="text" class="form-control" placeholder="Search" style="margin-top: 7px;">
 				</li> 
-	            <li><a href="http://builtwithbootstrap.com/" target="_blank">登录</a></li>
-	            <li><a href="https://wrapbootstrap.com/?ref=bsw" target="_blank">注册</a></li>
+	            <li><a href="#" target="_blank">登录</a></li>
+	            <li><a href="#" target="_blank">注册</a></li>
 	          </ul>
 	
 	        </div>
@@ -70,87 +70,11 @@
 				<!--
 	            	作者：lhr5533@126.com
 	            	时间：2017-05-20
-	            	描述：文章列表
+	            	描述：留言列表
 	            -->
-	            <div class="raw">
-	            	<!-- 单条留言 -->
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<!-- 头像 -->
-						<div class="pull-left" style="padding-right: 10px;">
-							<a href="#">
-				        		<img class="media-object"  style="width:32px;height:32px;border-radius:32px" src="images/header.jpg" alt="...">
-				      		</a>
-				      	</div>
-				      	
-				      	<!-- id和日期 -->
-				      	<div>
-				      		<h5 style="margin-bottom: 0px; margin-top: 0px;">黑白&nbsp;</h5>
-							<p><small>2017-5-21 16:22:53</small></p>
-				      	</div>
-				      	<!-- 留言 -->
-						<div class="clearfix">
-							<p>如今的网站开发更注重的是视觉体验.以及网站的优化.</p>
-							<div>
-								<p><a href="#">黑白：</a>奋斗吧,趁年轻.</p>
-							</div>
-							<div class="visible-xs pull-right"><button class="btn btn-sm btn btn-primary">评论</button></div>
-							<div class="hidden-xs pull-right"><a>评论</a></div>
-						</div>
-						<hr />
-					</div>
-					
-					<!-- 单条留言 -->
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<!-- 头像 -->
-						<div class="pull-left" style="padding-right: 10px;">
-							<a href="#">
-				        		<img class="media-object"  style="width:32px;height:32px;border-radius:32px" src="images/header.jpg" alt="...">
-				      		</a>
-				      	</div>
-				      	
-				      	<!-- id和日期 -->
-				      	<div>
-				      		<h5 style="margin-bottom: 0px; margin-top: 0px;">黑白&nbsp;</h5>
-							<p><small>2017-5-21 16:22:53</small></p>
-				      	</div>
-				      	<!-- 留言 -->
-						<div class="clearfix">
-							<p>如今的网站开发更注重的是视觉体验.以及网站的优化.</p>
-							<div>
-								<p><a href="#">黑白：</a>奋斗吧,趁年轻.</p>
-							</div>
-							<div class="visible-xs pull-right"><button class="btn btn-sm btn btn-primary">评论</button></div>
-							<div class="hidden-xs pull-right"><a>评论</a></div>
-						</div>
-						<hr />
-					</div>
-						
-						
-					<!-- 单条留言 -->
-					<div class="clearfix" style="margin-bottom: 30px;">
-						<!-- 头像 -->
-						<div class="pull-left" style="padding-right: 10px;">
-							<a href="#">
-				        		<img class="media-object"  style="width:32px;height:32px;border-radius:32px" src="images/header.jpg" alt="...">
-				      		</a>
-				      	</div>
-				      	
-				      	<!-- id和日期 -->
-				      	<div>
-				      		<h5 style="margin-bottom: 0px; margin-top: 0px;">黑白&nbsp;</h5>
-							<p><small>2017-5-21 16:22:53</small></p>
-				      	</div>
-				      	<!-- 留言 -->
-						<div class="clearfix">
-							<p>如今的网站开发更注重的是视觉体验.以及网站的优化.</p>
-							<div>
-								<p><a href="#">黑白：</a>奋斗吧,趁年轻.</p>
-							</div>
-							<div class="visible-xs pull-right"><button class="btn btn-sm btn btn-primary">评论</button></div>
-							<div class="hidden-xs pull-right"><a>评论</a></div>
-						</div>
-						<hr />
-					</div>
+	            <div id="messagelist" class="raw">
+
+
 				</div>
 			
 			</div>
@@ -186,11 +110,48 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="ajax/base.js"></script>
 <script>
+	var messages = ${messages};
     function init() {
-
+		
         setAbout();
 
         setNewArticle();
+
+        setData();
+    }
+    
+    function setData() {
+
+        var model = '<div class="clearfix"style="margin-bottom: 30px;">' +
+				'<!--头像-->' +
+				'<div class="blog-message">' +
+				'<div class="pull-left"style="padding-right: 10px;">' +
+				'<a href="#">' +
+				'<img class="media-object"style="width:32px;height:32px;border-radius:32px"src="images/header.jpg"alt="...">' +
+				'</a>' +
+				'</div><!--id和日期-->' +
+				'<div>' +
+				'<h5 style="margin-bottom: 0px; margin-top: 0px;">(name)</h5>' +
+				'<p>' +
+				'<small>(createtime)</small>' +
+				'</p></div>' +
+				'<p>(message)</p>' +
+				'<div>' +
+				'	<p><a href="#">黑白：</a>奋斗吧,趁年轻.</p>' +
+				'</div>' +
+				'</div><!--留言-->' +
+				'<div class="clearfix">' +
+				'<div class="visible-xs pull-right">' +
+				'<button class="btn btn-sm btn btn-primary">评论</button></div>' +
+				'<div class="hidden-xs pull-right"><a>评论</a></div></div><hr/></div>';
+        var html = ''
+		for (var i=0;i<messages.length;i++){
+			html += model.replace('(name)', messages[i].messageName)
+					.replace('(createtime)', messages[i].createTime)
+					.replace('(message)', messages[i].messageValue)
+		}
+
+		$('#messagelist').html(html);
     }
 
     init();

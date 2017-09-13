@@ -48,8 +48,8 @@
 				<li class="form-group" style="margin-bottom: 0px;">
 					<input type="text" class="form-control" placeholder="Search" style="margin-top: 7px;">
 				</li> 
-	            <li><a href="http://builtwithbootstrap.com/" target="_blank">登录</a></li>
-	            <li><a href="https://wrapbootstrap.com/?ref=bsw" target="_blank">注册</a></li>
+	            <li><a href="#" target="_blank">登录</a></li>
+	            <li><a href="#" target="_blank">注册</a></li>
 	          </ul>
 	
 	        </div>
