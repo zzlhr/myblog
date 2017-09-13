@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.7.18)
+# Host: 127.0.0.1 (MySQL 5.7.19)
 # Database: blog
-# Generation Time: 2017-09-01 16:36:04 +0000
+# Generation Time: 2017-09-13 02:26:51 +0000
 # ************************************************************
 
 
@@ -18,6 +18,32 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table about
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `about`;
+
+CREATE TABLE `about` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `about_hobby` varchar(255) DEFAULT NULL,
+  `about_motto` varchar(255) DEFAULT NULL,
+  `about_name` varchar(255) DEFAULT NULL,
+  `about_other` varchar(255) DEFAULT NULL,
+  `about_sex` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+LOCK TABLES `about` WRITE;
+/*!40000 ALTER TABLE `about` DISABLE KEYS */;
+
+INSERT INTO `about` (`id`, `about_hobby`, `about_motto`, `about_name`, `about_other`, `about_sex`)
+VALUES
+	(1,'买买买','业精于勤，荒于嬉；行成于思，毁于随','刘浩然','','男');
+
+/*!40000 ALTER TABLE `about` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table admin
@@ -60,7 +86,7 @@ VALUES
 	(10010,'test_lhr24','test_lhr24@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:25',0),
 	(10012,'test_lhr25','test_lhr25@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:26',0),
 	(10013,'test_lhr26','test_lhr26@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:27',0),
-	(10014,'admin','2388399752@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','J8Rzkf/wXa1R+Bl2cIAb1A==',0,'0:0:0:0:0:0:0:1','未知','2017-08-30 16:59:31','2017-09-01 15:20:41',1),
+	(10014,'admin','2388399752@qq.com','4QrcOUm6Wau+VuBX8g+IPg==','kBK89Aw0REgmPPUWcEm55Q==',0,'0:0:0:0:0:0:0:1','未知','2017-08-30 16:59:31','2017-09-12 18:04:49',1),
 	(10016,'test_lhr27','test_lhr27@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:28',0),
 	(10017,'test_lhr28','test_lhr28@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:28',0),
 	(10018,'test_lhr29','test_lhr29@qq.com','/OqSD3QStdp74M9CuMk3WQ==','',0,'192.168.0.66','-内网IP','2017-08-25 18:05:52','2017-09-01 15:20:43',0);
@@ -115,7 +141,7 @@ LOCK TABLES `admin_groupinfo` WRITE;
 
 INSERT INTO `admin_groupinfo` (`id`, `group_id`, `menu_id`, `group_value`, `create_time`, `update_time`)
 VALUES
-	(1,1,1,15,'2017-09-01 23:21:15','2017-09-01 23:21:52');
+	(1,1,1,99999,'2017-09-01 23:21:15','2017-09-12 18:03:49');
 
 /*!40000 ALTER TABLE `admin_groupinfo` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -151,13 +177,13 @@ LOCK TABLES `article` WRITE;
 
 INSERT INTO `article` (`id`, `article_title`, `article_text`, `article_admin`, `admin_group`, `article_picture`, `article_keyword`, `article_describe`, `article_click`, `article_praise`, `article_class`, `article_commend`, `article_status`, `create_time`, `update_time`)
 VALUES
-	(17,'关于博客','','admin',NULL,'http://localhost:3000/img/8221827218045679.png','博客,黑白,heibai,黑白的博客','                                                                                                                                                                                                        作为一个web程序员，注重自己的知识积累是很重要的，博客便是一个很好的途径。\n                ',1,0,'未分类',1,0,'2017-03-29 23:57:20','2017-08-17 22:43:43'),
+	(17,'关于博客','','admin',NULL,'http://localhost:3000/img/8221827218045679.png','博客,黑白,heibai,黑白的博客','                                                                                                                                                                                                        作为一个web程序员，注重自己的知识积累是很重要的，博客便是一个很好的途径。\n                ',2,0,'未分类',1,0,'2017-03-29 23:57:20','2017-09-12 18:24:21'),
 	(18,'公告1','  提交  ','admin',NULL,'http://localhost:3000/img/8221827218045679.png','留言板,公告,黑白,heibai,黑白的博客','                    关于留言板使用公告\n                ',107,18,'未分类',1,0,'2017-03-29 23:57:20','2017-08-17 22:43:15'),
 	(19,'更新记录','<p>本次更新针对文章系统进行了大规模的改动，添加评论功能和获取评论，以及文章的排序方式进行修改，改为倒叙，以前是正序，今天太晚了，明天要上班，就不继续写了，大家晚安。</p>','admin',NULL,'http://myheibai.cn/img/1740912231332401.png','更新,黑白,heibai,blog,博客,黑白的博客','更新概括\n1.更新文章评论功能\n2.更新文章倒序排列',37,0,'未分类',1,0,'2017-03-30 00:58:59','2017-08-17 22:43:15'),
 	(20,'JAVA web应用设置404 500页面方法','<p>\n    废话不多说直接贴代码\n</p>\n</p>\n<pre style=\"background-color: rgb(255, 255, 255); font-family: Consolas; font-size: 13.5pt;\">&lt;error-page&gt;    &lt;error-code&gt;404&lt;/error-code&gt;    &lt;location&gt;/static/view/404.html&lt;/location&gt;&lt;/error-page&gt;&lt;error-page&gt;    &lt;error-code&gt;500&lt;/error-code&gt;    &lt;location&gt;/static/view/500.html&lt;/location&gt;&lt;/error-page&gt;</pre>\n<p>\n需要在webapp下创建static/view文件夹','admin',NULL,'http://myheibai.cn/img/17682673193894893.png','java,web,404,500','JAVA web应用设置404 500页面方法',39,0,'未分类',1,0,'2017-04-03 13:13:42','2017-08-17 22:43:15'),
-	(21,'与 或 非 异或','<p>与或非异或运算都需要讲欲运算的值转换为二进制，</p><p>举例子就用 122，123这两个数。</p><p>转换为2进制分别是:</p><p class=\"p1\"><span class=\"s1\">122:1111010</span></p><p class=\"p1\"><span class=\"s1\">123:1111011</span></p><p class=\"p1\">我用的mac自带的<strong>python</strong>的<strong>bin()</strong>函数进行的转换代码如下</p><pre><p>&gt;&gt;&gt; bin(122);</p><p>&#39;0b1111010&#39;</p><p>&gt;&gt;&gt; bin(123)</p><p>&#39;0b1111011&#39;</p></pre><p>这里得到的结果需要去掉“0b”</p><p>到这里准备工作就做好了</p><p>下面开始进入主题</p><p><br/></p><p>我总结了一下简述一下这几个运算我的理解</p><p>与(&amp;)：转换为二进制后比较每一个位置的值，当前位置的值都为1该位为1 又一个不为1则为0；</p><p>或(|)：转换为二进制比较每一个位置的值，当前位置的值有一个为1则为1，也就是说除非某一位的值都为0，否则该位为1；</p><p>非(～)：转换为二进制，把所有的0变为1，1变为0.</p><p>异或(<span style=\"color: rgb(54, 46, 43); font-family: Arial; font-size: 14px; background-color: rgb(255, 255, 255);\">^</span>)：转换为二进制，比较每一位的值，相同为0，不同为1.</p><p><br/></p><p>这样总结应该大家都能看懂了把</p><p>下面看一下实际结果</p><p class=\"p1\"><span class=\"s1\">122&amp;123 ==&gt;&nbsp;</span>122</p><p class=\"p1\"><span class=\"s1\"></span>122|123 &nbsp;==&gt; &nbsp;123</p><p class=\"p1\">~122 ==&gt; -123</p><p class=\"p1\">~123 ==&gt; -124</p><p>122^123 ==&gt; 1</p><p>大家可以亲自试一下。</p><p><br/></p><p><img src=\"/img/ueditor/851305913288626176.png\" title=\"\" alt=\"9CC13968-D107-43AC-B903-E610276A6522.png\"/></p><p><br/></p>','admin',NULL,'http://myheibai.cn/img/6663555773025447.png','','逻辑运算与或非异或运算解析',69,0,'未分类',2,0,'2017-04-10 13:29:10','2017-08-17 22:43:15'),
+	(21,'与 或 非 异或','<p>与或非异或运算都需要讲欲运算的值转换为二进制，</p><p>举例子就用 122，123这两个数。</p><p>转换为2进制分别是:</p><p class=\"p1\"><span class=\"s1\">122:1111010</span></p><p class=\"p1\"><span class=\"s1\">123:1111011</span></p><p class=\"p1\">我用的mac自带的<strong>python</strong>的<strong>bin()</strong>函数进行的转换代码如下</p><pre><p>&gt;&gt;&gt; bin(122);</p><p>&#39;0b1111010&#39;</p><p>&gt;&gt;&gt; bin(123)</p><p>&#39;0b1111011&#39;</p></pre><p>这里得到的结果需要去掉“0b”</p><p>到这里准备工作就做好了</p><p>下面开始进入主题</p><p><br/></p><p>我总结了一下简述一下这几个运算我的理解</p><p>与(&amp;)：转换为二进制后比较每一个位置的值，当前位置的值都为1该位为1 又一个不为1则为0；</p><p>或(|)：转换为二进制比较每一个位置的值，当前位置的值有一个为1则为1，也就是说除非某一位的值都为0，否则该位为1；</p><p>非(～)：转换为二进制，把所有的0变为1，1变为0.</p><p>异或(<span style=\"color: rgb(54, 46, 43); font-family: Arial; font-size: 14px; background-color: rgb(255, 255, 255);\">^</span>)：转换为二进制，比较每一位的值，相同为0，不同为1.</p><p><br/></p><p>这样总结应该大家都能看懂了把</p><p>下面看一下实际结果</p><p class=\"p1\"><span class=\"s1\">122&amp;123 ==&gt;&nbsp;</span>122</p><p class=\"p1\"><span class=\"s1\"></span>122|123 &nbsp;==&gt; &nbsp;123</p><p class=\"p1\">~122 ==&gt; -123</p><p class=\"p1\">~123 ==&gt; -124</p><p>122^123 ==&gt; 1</p><p>大家可以亲自试一下。</p><p><br/></p><p><img src=\"/img/ueditor/851305913288626176.png\" title=\"\" alt=\"9CC13968-D107-43AC-B903-E610276A6522.png\"/></p><p><br/></p>','admin',NULL,'http://myheibai.cn/img/6663555773025447.png','','逻辑运算与或非异或运算解析',70,0,'未分类',2,0,'2017-04-10 13:29:10','2017-09-12 18:25:30'),
 	(22,'mybaits爬坑总结之编码','<p>最晚使用mybaits进行模糊查询时，明明有数据却不显示，后续查了一大丢资料都在说设置一个requltMap。结果设置很多个都不行，导致昨晚折腾到1点还没睡，今天晚上就刚刚跟了半天debug，最后想到了貌似编码没有设置，结果设置一下编码，哎呦还真的好了，哎，人生如戏啊。</p><p>总结一下：一定要设置编码啊</p><pre style=\"background-color: rgb(255, 255, 255); font-family: Consolas; font-size: 13.5pt;\"><span style=\"background-color:#efefef;\">&lt;</span><span style=\"color:#000080;background-color:#efefef;font-weight:bold;\">property </span><span style=\"color:#0000ff;background-color:#efefef;font-weight:bold;\">name</span><span style=\"color:#008000;background-color:#efefef;font-weight:bold;\">=&quot;url&quot; </span><span style=\"color:#0000ff;background-color:#efefef;font-weight:bold;\">value</span><span style=\"color:#008000;background-color:#efefef;font-weight:bold;\">=&quot;jdbc:mysql://114.215.42.76:3306/blog?useUnicode=true</span><span style=\"color:#0000ff;font-weight:bold;\">&amp;amp;</span><span style=\"color:#008000;background-color:#efefef;font-weight:bold;\">characterEncoding=UTF-8&quot; </span><span style=\"background-color:#efefef;\">/&gt;</span></pre><p><br/></p><p>这里注意一下就是&amp;需要用&amp;amp来表示。否则无法通过编译的。<br/></p><p><br/></p>','admin',NULL,'http://myheibai.cn/img/6349184637409739.jpg','','最近在整合springboot和mybatis，昨晚一个like查询，增么也查不到数据。后来才发现问题的所在。',13,0,'未分类',2,0,'2017-04-20 19:57:22','2017-08-17 22:43:15'),
-	(28,'新版本博客系统正在开发中','<p><img src=\"/img/ueditor/863785951850270720.png\" style=\"\"/></p><p><img src=\"/img/ueditor/863785951879630848.png\" style=\"\"/></p><p><img src=\"/img/ueditor/863785951929962496.png\" style=\"\"/></p><p>大致就是这个布局,正在开发中,开源地址:https://git.oschina.net/txrj/blog &nbsp; &nbsp;</p>','admin',NULL,'http://myheibai.cn/img/8568359380380217.png','新系统,博客,java','新系统,博客,java',17,1,'未分类',2,0,'2017-05-15 00:18:08','2017-08-17 22:43:15');
+	(28,'新版本博客系统正在开发中','<p><img src=\"/img/ueditor/863785951850270720.png\" style=\"\"/></p><p><img src=\"/img/ueditor/863785951879630848.png\" style=\"\"/></p><p><img src=\"/img/ueditor/863785951929962496.png\" style=\"\"/></p><p>大致就是这个布局,正在开发中,开源地址:https://git.oschina.net/txrj/blog &nbsp; &nbsp;</p>','admin',NULL,'http://myheibai.cn/img/8568359380380217.png','新系统,博客,java','新系统,博客,java',18,1,'未分类',2,0,'2017-05-15 00:18:08','2017-09-12 18:25:16');
 
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -417,8 +443,8 @@ VALUES
 	(32,'萧凌','测试',0,0,'111.76.184.47',NULL,NULL,'2017-03-29 23:23:33','2017-08-17 22:10:47'),
 	(35,'黑白','ssssss',32,0,NULL,NULL,NULL,'2017-05-11 23:05:59','2017-08-17 22:10:47'),
 	(36,'匿名','ssssss',32,0,NULL,NULL,NULL,'2017-05-11 23:35:01','2017-08-17 22:10:47'),
-	(37,'heibai','text',0,NULL,'',NULL,NULL,'2017-05-12 17:13:00','2017-08-17 22:10:47'),
-	(38,'heibai','text',0,NULL,'',NULL,NULL,'2017-05-12 17:14:01','2017-08-17 22:10:47'),
+	(37,'heibai','text',0,0,'',NULL,NULL,'2017-05-12 17:13:00','2017-09-13 09:59:17'),
+	(38,'heibai','text',0,0,'',NULL,NULL,'2017-05-12 17:14:01','2017-09-13 09:59:18'),
 	(39,'heibai','<p>测试</p>',0,0,'127.0.0.1',NULL,'2388399752','2017-05-14 20:57:12','2017-08-17 22:10:47'),
 	(40,'heibai','<p>测试发送</p>',0,0,'127.0.0.1',NULL,'2388399752','2017-05-14 20:59:52','2017-08-17 22:10:47'),
 	(41,'heibai','<p>测试发送</p>',0,0,'127.0.0.1',NULL,'2388399752','2017-05-14 21:00:02','2017-08-17 22:10:47'),
