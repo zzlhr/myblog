@@ -1,16 +1,21 @@
 package com.zzlhr.controller;
 
 import com.zzlhr.entity.Article;
+import com.zzlhr.entity.Message;
 import com.zzlhr.service.AboutService;
 import com.zzlhr.service.ArticleService;
+import com.zzlhr.service.MessageService;
 import com.zzlhr.util.JSONUtil;
 import com.zzlhr.util.NetworkUtil;
 import com.zzlhr.vo.ArticleListVo;
+import com.zzlhr.vo.MessageVo;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +43,8 @@ public class PublicController {
     @Autowired
     private AboutService aboutService;
 
+    @Autowired
+    private MessageService messageService;
 
     @RequestMapping({"/","/index.*"})
     public ModelAndView index(){
@@ -153,13 +160,25 @@ public class PublicController {
     }
 
     @RequestMapping("/message.html")
-    public String message(){
-        return "message";
+    public ModelAndView message(){
+        //分页对象
+        PageRequest pageRequest = new PageRequest(0,10, new Sort(Sort.Direction.DESC, "id"));
+        //调用获取消息
+        List<MessageVo> vos = messageService.getMessage(pageRequest);
+        //创建model对象
+        ModelAndView model = new ModelAndView("message");
+        //向model对象插入对象
+
+        model.addObject("messages", JSONUtil.formatDate(JSONArray.fromObject(vos),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString());
+        return model;
     }
     @RequestMapping("/works.html")
     public String works(){
         return "works";
     }
+
 
 
 }
