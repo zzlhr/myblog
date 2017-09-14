@@ -7,6 +7,7 @@ import com.zzlhr.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,11 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao;
 
     @Override
-    public Map<String, Object> getArticleList(String keyword, int page) {
-        return null;
+    public List<Article> getArticleList(String keyword, int page) {
+        if ("".equals(keyword) || keyword == null){
+            return articleDao.findAll(new PageRequest(page - 1, 10, new Sort(Sort.Direction.DESC, "id"))).getContent();
+        }
+        return articleDao.findByArticleKeywordLikeAndArticleStatus(keyword, 0, new PageRequest(page - 1, 10, new Sort(Sort.Direction.DESC, "id"))).getContent();
     }
 
     @Override
