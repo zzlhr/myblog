@@ -5,11 +5,11 @@
 
 	<groupId>com.zzlhr</groupId>
 	<artifactId>myblog</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>0.1.8-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<name>myblog</name>
-	<description>Demo project for Spring Boot</description>
+	<description>this is my blog</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -49,6 +49,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -158,10 +163,10 @@
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
         </dependency>
-
     </dependencies>
 
 	<build>
+		<finalName>myblog</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -174,6 +179,7 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+
 		</plugins>
 	</build>
 

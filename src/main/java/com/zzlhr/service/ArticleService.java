@@ -18,7 +18,7 @@ public interface ArticleService {
      * @param page          页数
      * @return
      */
-    Map<String, Object> getArticleList(String keyword, int page);
+    List<Article> getArticleList(String keyword, int page);
 
     /** 获取推荐文章列表 */
     List<Article> getCommendArticle(int commend, int page);
@@ -32,6 +32,8 @@ public interface ArticleService {
 
     void addArticleClick(int id, String ip);
 
+
+    Article saveArticle(Article article);
 
 
 
