@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -88,6 +89,7 @@ public class PublicController {
         result = JSONUtil.formatDate(result, keys, "yyyy-MM-dd HH:mm:ss");
 
         model.addObject("article", result.toString());
+        model.addObject("title", article.getArticleTitle());
 
         //添加访问数量
         try {
@@ -179,6 +181,21 @@ public class PublicController {
         return "works";
     }
 
+    @ResponseBody
+    @RequestMapping("/message-send.do")
+    public String sendMessage(String name, String link, String text, HttpServletRequest request){
+        if (name == null || link == null || text == null ||
+                "".equals(name) || "".equals(link) || "".equals(text)){
+            return "<script>alert('请输入必填信息');location.href='message.html';</script>";
+        }
+        try {
+            messageService.sendMessage(name, link, text, request);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "<script>alert('发表留言失败！');location.href='message.html';</script>";
+        }
+        return "<script>alert('发表成功！');location.href='message.html';</script>";
+    }
 
 
 }

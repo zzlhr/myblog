@@ -16,10 +16,8 @@ public interface ArticleDao extends JpaRepository<Article, Integer> {
     /** 通过文章分类和状态查询文章 */
     Page<Article> findByArticleClassAndArticleStatus(String articleClass, Integer articleStatus, Pageable pageable);
 
-
     /** 通过文章标题和状态查询文章 */
     Page<Article> findByArticleTitleLikeAndArticleStatus(String articleTitle, Integer articleStatus, Pageable pageable);
-
 
     /** 通过文章关键字和状态查询文章 */
     Page<Article> findByArticleKeywordLikeAndArticleStatus(String articleKeyword, Integer articleStatus, Pageable pageable);

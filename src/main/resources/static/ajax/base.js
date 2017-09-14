@@ -20,6 +20,7 @@ function ajax(url, type, data,callback) {
 
 
 function baseurl() {
+    // return "http://blog.myheibai.cn"
     return "http://localhost:8080"
 }
 

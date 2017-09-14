@@ -2,22 +2,28 @@ package com.zzlhr.controller;
 
 import com.google.gson.Gson;
 import com.zzlhr.entity.Admin;
+import com.zzlhr.entity.Article;
 import com.zzlhr.entity.MenuDo;
 import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
 import com.zzlhr.service.AdminService;
+import com.zzlhr.service.ArticleService;
 import com.zzlhr.service.MenuService;
 import com.zzlhr.util.CookieUtils;
+import com.zzlhr.util.JSONUtil;
 import com.zzlhr.util.NetworkUtil;
 import com.zzlhr.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.zzlhr.enums.ResultErrorStatus.UNKNOWN_ERROR;
@@ -47,6 +54,8 @@ public class AdminController {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private ArticleService articleService;
 
 
     Gson gson = new Gson();
@@ -58,7 +67,45 @@ public class AdminController {
         errorRequst.put("msg",UNKNOWN_ERROR.getMsg());
     }
 
+    @RequestMapping(value = {"/", "/index.html"})
+    public ModelAndView index(HttpServletRequest request){
+        return new ModelAndView("admin/index");
+    }
 
+    @RequestMapping("/articles.html")
+    public ModelAndView articles(){
+
+        ModelAndView model = new ModelAndView("admin/articles");
+
+        List<Article> result = articleService.getArticleList("", 1);
+        //格式化时间
+        String[] keys = {"updateTime", "createTime"};
+
+        result = JSONUtil.formatDate(JSONArray.fromObject(result), keys, "yyyy-MM-dd HH:mm:ss");
+
+        model.addObject("articles", result.toString());
+
+        return model;
+    }
+
+
+    @RequestMapping("/article-add.do")
+    public String addArticle(String articelTitile, String articleKeyword,
+                             String articleDescribe, String articleClass,
+                             Integer articleCommend, Integer articleStatus,
+                             String articleText, HttpServletRequest request){
+        Article article = new Article();
+        article.setArticleTitle(articelTitile);
+        article.setArticleKeyword(articleKeyword);
+        article.setArticleDescribe(articleDescribe);
+        article.setArticleClass(articleClass);
+        article.setArticleCommend(articleCommend);
+        article.setArticleStatus(articleStatus);
+        article.setArticleText(articleText);
+        article.setArticleAdmin(CookieUtils.getCookieValue(request,"admin"));
+        Article result = articleService.saveArticle(article);
+        return JSONObject.fromObject(result).toString();
+    }
 
     @RequestMapping("/login.do")
     public String login(String admin, String password, HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException {
@@ -170,7 +217,7 @@ public class AdminController {
 
     @RequestMapping("/menulist.do")
     public String menuList(HttpServletRequest request){
-       return gson.toJson(menuService.getMenuList(CookieUtils.getCookieValue(request, "admin")));
+       return JSONObject.fromObject(menuService.getMenuList(CookieUtils.getCookieValue(request, "admin"))).toString();
     }
 
 

@@ -16,8 +16,8 @@ public class Message implements Serializable {
     private Integer id;
     private String messageName;
     private String messageValue;
-    private Integer messageFid;
-    private Integer messageReplaynum;
+    private Integer messageFid = 0;
+    private Integer messageReplaynum = 0;
     private String messageIp;
     private String messageAddress;
     private String messageLink;
