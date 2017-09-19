@@ -1,9 +1,11 @@
 package com.zzlhr.controller;
 
 import com.zzlhr.entity.Article;
+import com.zzlhr.entity.FriendLink;
 import com.zzlhr.entity.Message;
 import com.zzlhr.service.AboutService;
 import com.zzlhr.service.ArticleService;
+import com.zzlhr.service.FriendLinkService;
 import com.zzlhr.service.MessageService;
 import com.zzlhr.util.JSONUtil;
 import com.zzlhr.util.NetworkUtil;
@@ -47,9 +49,20 @@ public class PublicController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private FriendLinkService friendLinkService;
+
     @RequestMapping({"/","/index.*"})
     public ModelAndView index(){
+        ModelAndView model = new ModelAndView("index");
 
+
+        /* 推荐友链 */
+        model = getFriendLinks(model);
+
+
+
+        /* 推荐首页文章 */
         List<Article> comments = articleService.getCommendArticle(1,0);
         List<ArticleListVo> result = new ArrayList<>();
 
@@ -58,15 +71,11 @@ public class PublicController {
             BeanUtils.copyProperties(comment, articleListVo);
             result.add(articleListVo);
         }
-
-
         String articles = JSONUtil.formatDate(JSONArray.fromObject(result),
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString();
-
-        ModelAndView model = new ModelAndView("index");
-
         model.addObject("articles", articles);
+
 
         return model;
     }
@@ -74,8 +83,10 @@ public class PublicController {
     @RequestMapping("/article.html")
     public ModelAndView article(Integer id, HttpServletRequest request){
 
-
         ModelAndView model = new ModelAndView("article");
+
+        /* 推荐友链 */
+        model = getFriendLinks(model);
 
         //查询文章详情
         Article article = articleService.getArticleDetails(id);
@@ -104,6 +115,12 @@ public class PublicController {
 
     @RequestMapping("/articles.html")
     public ModelAndView articles(String cs, @RequestParam(value = "page", defaultValue = "0") Integer page){
+
+        ModelAndView model = new ModelAndView("articles");
+
+        /* 推荐友链 */
+        model = getFriendLinks(model);
+
         Page<Article> articlePage = articleService.getArticleToClass(cs, page);
         List<Article> list = articlePage.getContent();
         List<ArticleListVo> result = new ArrayList<>();
@@ -118,7 +135,6 @@ public class PublicController {
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString();
 
-        ModelAndView model = new ModelAndView("articles");
 
         model.addObject("articles", articles);
 
@@ -157,28 +173,46 @@ public class PublicController {
 
 
     @RequestMapping("/about.html")
-    public String about(){
-        return "about";
+    public ModelAndView about(){
+        ModelAndView model = new ModelAndView("about");
+
+        /* 推荐友链 */
+        model = getFriendLinks(model);
+
+        return model;
     }
 
     @RequestMapping("/message.html")
     public ModelAndView message(){
+
+        //创建model对象
+        ModelAndView model = new ModelAndView("message");
+
+        /* 推荐友链 */
+        model = getFriendLinks(model);
+
+
         //分页对象
         PageRequest pageRequest = new PageRequest(0,10, new Sort(Sort.Direction.DESC, "id"));
         //调用获取消息
         List<MessageVo> vos = messageService.getMessage(pageRequest);
-        //创建model对象
-        ModelAndView model = new ModelAndView("message");
+
         //向model对象插入对象
 
         model.addObject("messages", JSONUtil.formatDate(JSONArray.fromObject(vos),
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString());
+
         return model;
     }
     @RequestMapping("/works.html")
-    public String works(){
-        return "works";
+    public ModelAndView works(){
+        ModelAndView model = new ModelAndView("works");
+
+        /* 推荐友链 */
+        model = getFriendLinks(model);
+
+        return model;
     }
 
     @ResponseBody
@@ -195,6 +229,22 @@ public class PublicController {
             return "<script>alert('发表留言失败！');location.href='message.html';</script>";
         }
         return "<script>alert('发表成功！');location.href='message.html';</script>";
+    }
+
+
+    /**
+     * 公共获取友链方法
+     * @param model modelAndView
+     * @return
+     */
+    public ModelAndView getFriendLinks(ModelAndView model){
+        /* 友链 */
+        List<FriendLink> friendLinklist = friendLinkService.getAllFrinedLink();
+        String friendLinks = JSONUtil.formatDate(JSONArray.fromObject(friendLinklist),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString();
+        model.addObject("friendLinks",friendLinks);
+        return model;
     }
 
 

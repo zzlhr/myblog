@@ -24,6 +24,16 @@ function baseurl() {
     return "http://localhost:8080"
 }
 
+function setFriendLink() {
+    var models = ''
+    for (var i=0;i<friendLinks.length;i++){
+        var friendLink = friendLinks[i];
+        var model = "<a href='(href)'>(name)</a>&nbsp;&nbsp;";
+        model = model.replace('(href)', friendLink.linkUrl).replace('(name)', friendLink.linkValue);
+        models += model;
+    }
+    $('.blog-friendlink').html(models)
+}
 
 /**
  * 设置关于
