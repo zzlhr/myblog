@@ -107,6 +107,17 @@
 		                	</ul>
 		                </div>
 		              </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">友情链接</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-group blog-friendlink">
+
+                            </ul>
+                        </div>
+                    </div>
+
 				</div>
 			</div>
 		</div>
@@ -117,7 +128,10 @@
 <script>
 
 	var articles = ${articles};
+	var friendLinks = ${friendLinks};
     function init() {
+        setFriendLink();
+
         var model = '<div class="clearfix panel panel-default blog-article-li" style="margin-bottom: 30px;">' +
                 '<a href="(href)"><h4>(title)</h4></a>' +
                 '<p><small>作者：(admin)&nbsp;|&nbsp;发布时间：(time)&nbsp;</small><small class="hidden-xs hidden-sm">|&nbsp;点击数：(click)&nbsp;|&nbsp;赞：(praise)</small></p>' +
@@ -142,7 +156,7 @@
         $('#articlelist').html(tmodel);
 
         setAbout();
-
+//        setFriendLink();
         setNewArticle();
     }
 

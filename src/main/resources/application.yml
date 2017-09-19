@@ -31,5 +31,14 @@ spring:
     content-type: text/html
     template-loader-path: classpath:/templates/
 
+  redis:
+    host: localhost
+    port: 6379
+
+
   resources:
     static-locations: classpath:/static/
+#server:
+#  port: 80
+
+

@@ -104,7 +104,16 @@
 	                	</ul>
 	                </div>
 	              </div>
-              
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">友情链接</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group blog-friendlink">
+
+                        </ul>
+                    </div>
+                </div>
               
 			</div>
 		</div>
@@ -117,8 +126,9 @@
 <script type="text/javascript" src="ajax/base.js"></script>
 <script>
 	var article = ${article};
-	
-	function init() {
+    var friendLinks = ${friendLinks};
+
+    function init() {
 
 	    var aboutarticle =
 				'<small>作者：(author)&nbsp;|&nbsp;发布时间：(createTime)&nbsp;|&nbsp;点击数：(click)&nbsp;</small>';
@@ -134,7 +144,7 @@
         $('#article-text').html(article.articleText);
 
         setAbout();
-
+        setFriendLink();
         setNewArticle();
 
     }

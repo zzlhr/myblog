@@ -118,7 +118,16 @@
 	                	</ul>
 	                </div>
 	              </div>
-              
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">友情链接</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group blog-friendlink">
+
+                        </ul>
+                    </div>
+                </div>
               
 			</div>
 		</div>
@@ -130,10 +139,12 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="ajax/base.js"></script>
 <script>
+    var friendLinks = ${friendLinks};
+
     function init() {
 
         setAbout();
-
+        setFriendLink();
         setNewArticle();
     }
 

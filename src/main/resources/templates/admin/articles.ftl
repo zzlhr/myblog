@@ -47,7 +47,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">添加文章</h4>
+					<h4 class="modal-title">编辑文章</h4>
 				</div>
 				<div class="modal-body">
 					<form id="addArticleForm" action="article-add.do" method="post" class="form-horizontal">
@@ -172,8 +172,9 @@
         $('#addArticleBtn').on('click', function () {
             $('#addArticleForm').submit();
         })
-        
-        
+
+		//待删除id
+        var holdDelectId = '';
 		//渲染数据
 		for (var i=0;i<tableData.length;i++){
 //            tableData = JSON.parse(tableData);
@@ -190,23 +191,33 @@
                     '<td>'+tableData[i].updateTime+'</td>' +
                     '<td>' +
                     '<a href="#" class="btn btn-primary btn-xs">修改</a>' +
-                    '<button class="btn btn-primary btn-xs del-article" name="'+tableData[i].id+'" data-toggle="model" data-target="#del-article">删除</button>' +
+                    '<button class="btn btn-primary btn-xs del-article" name="'+tableData[i].id+'" ' +
+//					'data-toggle="model" data-target="#del-article">删除</button>' +
+					'>删除</button>'
                     '</td>' +
                     '</tr>';
 
 			$('#article-tbody').html($('#article-tbody').html()+row);
+			
+			//删除列表绑定事件
+			$('.del-article').on('click', function () {
+//				$(this).
+                $('#del-article').modal('show');
+                holdDelectId = $(this).attr("name");
+			})
 
 
 
-            //设置删除按钮监听事件
-            $('.del-article').on('click',function () {
-                delArticleId = $(this).attr("name");
-                $('#del-article').modal();
+
+            //设置删除确定按钮监听时间
+			$('.del-article-enter').on('click'， function () {
+				//删除交互地址！
+
+
+
             })
 
 		}
-
-		
     }
 
 

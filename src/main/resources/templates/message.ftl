@@ -103,6 +103,17 @@
 
 					</div>
 				  </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">友情链接</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group blog-friendlink">
+
+                        </ul>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>
@@ -152,6 +163,8 @@
 <script type="text/javascript" src="js/wangEditor.min.js"></script>
 <script>
 	var messages = ${messages};
+    var friendLinks = ${friendLinks};
+
     function init() {
 		
         setAbout();
@@ -161,6 +174,8 @@
         setData();
 
         initEditor();
+        setFriendLink();
+
 
     }
 
@@ -229,7 +244,6 @@
 					.replace('(createtime)', messages[i].createTime)
 					.replace('(message)', messages[i].messageValue)
 		}
-
 		$('#messagelist').html(html);
     }
 

@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>黑白的博客</title>
+	<meta>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/blog3.css" />
@@ -99,7 +100,18 @@
 
 	                	</ul>
 	                </div>
-	              </div>
+				  </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">友情链接</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group blog-friendlink">
+
+                        </ul>
+                    </div>
+                </div>
 			</div>
 		</div>
 		
@@ -112,7 +124,7 @@
 <script>
 
 	var articles = ${articles?string};
-	
+	var friendLinks = ${friendLinks};
 	function init() {
 	    var model = '<div class="clearfix panel panel-default blog-article-li" style="margin-bottom: 30px;">' +
                 		'<a href="(href)"><h4>(title)</h4></a>' +
@@ -136,10 +148,12 @@
 //		console.log(tmodel);
         $('#articlelist').html(tmodel);
 
-
+        setFriendLink();
         setAbout();
         setNewArticle();
     }
+
+
 
     init();
 
