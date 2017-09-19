@@ -16,7 +16,7 @@ public class AuthOperate {
 
   @Id
   @GeneratedValue
-  private Long id;
+  private Integer id;
   /**
    * 操作名称
    */
@@ -24,7 +24,7 @@ public class AuthOperate {
   /**
    * 所属模块
    */
-  private Long operateModel;
+  private Integer operateModel;
   /**
    * 代码中的名称
    */
@@ -32,6 +32,6 @@ public class AuthOperate {
   /**
    * 排序，用于二进制存储辨别位置使用
    */
-  private Long operateSite;
+  private Integer operateSite;
 
 }

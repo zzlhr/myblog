@@ -13,7 +13,7 @@ public class AuthModel {
 
   @Id
   @GeneratedValue
-  private Long id;
+  private Integer id;
   /**
    * 模块名
    */
@@ -22,11 +22,11 @@ public class AuthModel {
   /**
    * 模块状态
    */
-  private Long modelStatus;
+  private Integer modelStatus;
   /**
    * 模块排序
    */
-  private Long modelSite;
+  private Integer modelSite;
 
 
   @Column(insertable = false, updatable = false)
