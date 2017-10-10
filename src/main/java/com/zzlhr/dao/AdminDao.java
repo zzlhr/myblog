@@ -22,4 +22,7 @@ public interface AdminDao extends JpaRepository<Admin, Integer>{
     Admin findByAdminEmail(String adminEmail);
 
     Page<Admin> findAdminsByAdminNameLike(String adminName, Pageable pageable);
+
+    Admin findByAdminToken(String adminToken);
+
 }

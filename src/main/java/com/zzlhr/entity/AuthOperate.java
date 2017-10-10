@@ -34,4 +34,9 @@ public class AuthOperate {
    */
   private Integer operateSite;
 
+  /**
+   * 功能类型 0为操作不可见,1为显示菜单
+   */
+  private Integer operateType;
+
 }

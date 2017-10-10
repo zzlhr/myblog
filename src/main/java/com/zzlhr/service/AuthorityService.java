@@ -57,7 +57,7 @@ public interface AuthorityService {
 
 
     /** 是否有权限 */
-    Boolean isHaveAuthority(String uri, String admin, String token);
+//    Boolean isHaveAuthority(String uri, String admin, String token);
 
 
 }

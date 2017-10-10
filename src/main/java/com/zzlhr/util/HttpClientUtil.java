@@ -73,7 +73,7 @@ public class HttpClientUtil {
         if (isPost){
             return sendPost(url,paramsListToStr(params), header);
         }else {
-//            System.out.println(paramsListToStr(params));
+            System.out.println(url);
             return sendGet(url,paramsListToStr(params), header);
         }
     }

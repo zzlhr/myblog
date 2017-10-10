@@ -10,8 +10,7 @@ import java.util.List;
 @Repository
 public interface AdminGroupinfoDao extends JpaRepository<AdminGroupinfo, Integer>{
 
-    AdminGroupinfo findAdminGroupinfoByGroupIdAndMenuId(Integer groupId, Integer menuId);
 
-    List<AdminGroupinfo> findAdminGroupinfosByGroupId(Integer groupId);
+    List<AdminGroupinfo> findAdminGroupinfosByGroupIdAndGroupValueNot(Integer groupId, Integer groupValue);
 
 }

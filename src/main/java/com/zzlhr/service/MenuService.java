@@ -7,7 +7,7 @@ import java.util.*;
  */
 public interface MenuService {
 
-    Map<String, Object> getMenuList(String admin);
+//    Map<String, Object> getMenuList(String admin);
 
 
 

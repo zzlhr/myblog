@@ -21,7 +21,15 @@ public class AuthorityUtil {
 
     }
 
-
+    /**
+     * 十进制转二进制
+     * @param decimal 十进制值
+     * @return 二进制值
+     */
+    public static byte[] decimalToBinary(int decimal){
+        String bin = Integer.toBinaryString(decimal);
+        return bin.getBytes();
+    }
     public static void main(String[] args) {
         isHaveAuthority(1,1);
     }

@@ -15,8 +15,13 @@ public class AdminGroupinfo implements Serializable {
   @Id
   @GeneratedValue
   private Integer id;
+
   private Integer groupId;
-  private Integer menuId;
+
+  private Integer authModelId;
+
   private Integer groupValue;
+
+
 
 }

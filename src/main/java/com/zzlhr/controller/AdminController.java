@@ -20,8 +20,10 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,14 +44,13 @@ import static java.lang.String.valueOf;
 /**
  * Created by 刘浩然 on 2017/7/27.
  */
-@RestController
+@Controller
 @RequestMapping("/admin")
 @Slf4j
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
-
 
     @Autowired
     private MenuService menuService;
@@ -67,28 +68,8 @@ public class AdminController {
         errorRequst.put("msg",UNKNOWN_ERROR.getMsg());
     }
 
-    @RequestMapping(value = {"/", "/index.html"})
-    public ModelAndView index(HttpServletRequest request){
-        return new ModelAndView("admin/index");
-    }
 
-    @RequestMapping("/articles.html")
-    public ModelAndView articles(){
-
-        ModelAndView model = new ModelAndView("admin/articles");
-
-        List<Article> result = articleService.getArticleList("", 1);
-        //格式化时间
-        String[] keys = {"updateTime", "createTime"};
-
-        result = JSONUtil.formatDate(JSONArray.fromObject(result), keys, "yyyy-MM-dd HH:mm:ss");
-
-        model.addObject("articles", result.toString());
-
-        return model;
-    }
-
-
+    @ResponseBody
     @RequestMapping("/article-add.do")
     public String addArticle(String articelTitile, String articleKeyword,
                              String articleDescribe, String articleClass,
@@ -107,6 +88,7 @@ public class AdminController {
         return JSONObject.fromObject(result).toString();
     }
 
+
     @RequestMapping("/login.do")
     public String login(String admin, String password, HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException {
         JSONObject json = JSONObject.fromObject(adminService.login(admin, password, NetworkUtil.getIpAddress(request)));
@@ -117,10 +99,13 @@ public class AdminController {
             response.addCookie(new Cookie("token", json.getString("token")));
             /*登录时间*/
             response.addCookie(new Cookie("lt", String.valueOf(new Date().getTime())));
+            return "redirect:/admin/index.html";
         }
-        return gson.toJson(json);
+//        return gson.toJson(json);
+        return "<script>alert(\"用户名或密码错误!\");</script>";
     }
 
+    @ResponseBody
     @RequestMapping("/admin_add.do")
     public String addAdmin(String name, String password, String email, HttpServletRequest request){
         String ip;
@@ -215,9 +200,10 @@ public class AdminController {
     }
 
 
+    @ResponseBody
     @RequestMapping("/menulist.do")
-    public String menuList(HttpServletRequest request){
-       return JSONObject.fromObject(menuService.getMenuList(CookieUtils.getCookieValue(request, "admin"))).toString();
+    public String menuList(String token, HttpServletRequest request){
+       return JSONArray.fromObject(adminService.getMenuList(token)).toString();
     }
 
 
@@ -228,4 +214,9 @@ public class AdminController {
     }
 
 
+    @RequestMapping("/login.html")
+    public ModelAndView login(){
+        ModelAndView mv = new ModelAndView("admin/login");
+        return mv;
+    }
 }

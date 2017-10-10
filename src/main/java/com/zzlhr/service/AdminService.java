@@ -1,11 +1,14 @@
 package com.zzlhr.service;
 
 import com.zzlhr.entity.Admin;
+import com.zzlhr.vo.MenuVo;
 import com.zzlhr.vo.PageListData;
 import org.springframework.data.domain.PageRequest;
 
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,11 +24,19 @@ public interface AdminService {
 
 
     /** 通过adminname和email查询管理员 */
-    Admin findAdmin(String admin);
+    Admin findAdminList(String admin);
 
     /** 登录 */
-    Map<String, Object> login(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+    Map<String, Object> loginIn(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 
+    /** 登出 */
+    Map<String, Object> loginOut(String admin, String token, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+
+
+    Admin findAdmin(String admin);
+
+    @Transactional
+    Map<String, Object> login(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 
     Map<String, Object> updateAdminPassword(String admin, String oldPassword, String newPassword, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 
@@ -37,5 +48,9 @@ public interface AdminService {
 
 
     Map<String, Object> findAdminById(Integer id);
+
+
+    /** 获取菜单 */
+    List<MenuVo> getMenuList(String adminToken);
 
 }
