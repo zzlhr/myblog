@@ -3,12 +3,11 @@ package com.zzlhr.controller;
 import com.zzlhr.entity.Article;
 import com.zzlhr.entity.FriendLink;
 import com.zzlhr.entity.Message;
-import com.zzlhr.service.AboutService;
-import com.zzlhr.service.ArticleService;
-import com.zzlhr.service.FriendLinkService;
-import com.zzlhr.service.MessageService;
+import com.zzlhr.entity.Website;
+import com.zzlhr.service.*;
 import com.zzlhr.util.JSONUtil;
 import com.zzlhr.util.NetworkUtil;
+import com.zzlhr.util.WeiXinUtil;
 import com.zzlhr.vo.ArticleListVo;
 import com.zzlhr.vo.MessageVo;
 import net.sf.json.JSONArray;
@@ -52,14 +51,18 @@ public class PublicController {
     @Autowired
     private FriendLinkService friendLinkService;
 
+    @Autowired
+    private WebsiteService websiteService;
+
+
+
+
     @RequestMapping({"/","/index.*"})
     public ModelAndView index(){
         ModelAndView model = new ModelAndView("index");
 
-
         /* 推荐友链 */
         model = getFriendLinks(model);
-
 
 
         /* 推荐首页文章 */
@@ -75,8 +78,6 @@ public class PublicController {
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString();
         model.addObject("articles", articles);
-
-
         return model;
     }
 
@@ -90,7 +91,8 @@ public class PublicController {
 
         //查询文章详情
         Article article = articleService.getArticleDetails(id);
-
+        model.addObject("keyword",article.getArticleKeyword());
+        model.addObject("description", article.getArticleDescribe());
         //转化json
         JSONObject result = JSONObject.fromObject(article);
 
@@ -244,7 +246,28 @@ public class PublicController {
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString();
         model.addObject("friendLinks",friendLinks);
+        System.out.println("viewname"+model.getViewName());
+        //添加网站基本信息
+        if (model.getViewName() != "article"){
+            Website website = websiteService.getWebsite();
+            model.addObject("website", website);
+        }
+
         return model;
+    }
+    @Autowired
+    private WeiXinUtil wx;
+
+    @ResponseBody
+    @RequestMapping("/getwxconf.json")
+    public String getWxConf(String url, String params){
+        try {
+            wx.setUrlAndParams(url,params);
+            return wx.getWeiXinConf().toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "获取失败";
     }
 
 
