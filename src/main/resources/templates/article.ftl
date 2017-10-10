@@ -6,6 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>${title}</title>
+    <meta name="keyword" content="${keyword}">
+    <meta name="description" content="${description}">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/blog3.css" />
@@ -34,9 +36,6 @@
             </li>
             <li>
               <a href="message.html">留言板</a>
-            </li>
-            <li>
-              <a href="works.html">作品展示</a>
             </li>
             <li>
 			  <a href="about.html">about</a>

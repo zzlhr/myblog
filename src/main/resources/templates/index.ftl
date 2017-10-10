@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>黑白的博客</title>
-	<meta>
+	<meta name="keyword" content="${website.websiteKeyword}">
+	<meta name="description" content="${website.websiteDescribe}">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/blog3.css" />
@@ -137,12 +138,12 @@
 		for (var i=0;i<articles.length;i++){
 			var article = articles[i];
             tmodel += model.replace('(title)', article.articleTitle)
-					.replace('(admin)', article.articleAdmin)
-					.replace('(time)', article.updateTime)
-					.replace('(click)',article.articleClick)
-					.replace('(praise)', article.articlePraise)
-					.replace('(describe)', article.articleDescribe)
-					.replace('(href)', 'article.html?id=' + article.id)
+                    .replace('(admin)', article.articleAdmin)
+                    .replace('(time)', article.updateTime)
+                    .replace('(click)',article.articleClick)
+                    .replace('(praise)', article.articlePraise)
+                    .replace('(describe)', article.articleDescribe)
+                    .replace('(href)', 'article.html?id=' + article.id)
                     .replace('(href)', 'article.html?id=' + article.id);
 		}
 //		console.log(tmodel);
