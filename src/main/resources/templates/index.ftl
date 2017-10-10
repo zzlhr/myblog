@@ -38,9 +38,6 @@
               <a href="message.html">留言板</a>
             </li>
             <li>
-              <a href="works.html">作品展示</a>
-            </li>
-            <li>
 			  <a href="about.html">about</a>
             </li>
           </ul>
