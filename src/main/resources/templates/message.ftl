@@ -165,10 +165,11 @@
     var friendLinks = ${friendLinks};
 
     function init() {
-		
-        setAbout();
 
-        setNewArticle();
+        var leftarticles = ${leftArticles};
+        var aboutme = ${aboutme};
+        setAbout(aboutme);
+        setNewArticle(leftarticles);
 
         setData();
 

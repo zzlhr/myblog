@@ -142,9 +142,12 @@
 
         $('#article-text').html(article.articleText);
 
-        setAbout();
+
+        var leftarticles = ${leftArticles};
+        var aboutme = ${aboutme};
+        setAbout(aboutme);
+        setNewArticle(leftarticles);
         setFriendLink();
-        setNewArticle();
 
     }
 

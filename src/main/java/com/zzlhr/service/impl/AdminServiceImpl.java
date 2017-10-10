@@ -1,14 +1,16 @@
 package com.zzlhr.service.impl;
 
 import com.zzlhr.api.PassIpGetAddress;
-import com.zzlhr.dao.AdminDao;
-import com.zzlhr.entity.Admin;
+import com.zzlhr.dao.*;
+import com.zzlhr.entity.*;
 import com.zzlhr.enums.*;
 import com.zzlhr.service.AdminService;
+import com.zzlhr.util.AuthorityUtil;
 import com.zzlhr.util.BlogException;
 import com.zzlhr.util.Code;
 import com.zzlhr.vo.AdminListVo;
 import com.zzlhr.vo.AdminVo;
+import com.zzlhr.vo.MenuVo;
 import com.zzlhr.vo.PageListData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +33,18 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminDao dao;
+
+    @Autowired
+    private AdminGroupDao adminGroupDao;
+
+    @Autowired
+    private AdminGroupinfoDao adminGroupinfoDao;
+
+    @Autowired
+    private AuthModelDao authModelDao;
+
+    @Autowired
+    private AuthOperateDao authOperateDao;
 
     @Override
     public Map<String, Object> deleteAdmin(String adminName, String ip) {
@@ -55,6 +69,21 @@ public class AdminServiceImpl implements AdminService {
         result.put("code", "0");
         result.put("msg", "操作成功");
         return result;
+    }
+
+    @Override
+    public Admin findAdminList(String admin) {
+        return findAdmin(admin);
+    }
+
+    @Override
+    public Map<String, Object> loginIn(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return login(admin, password, ip);
+    }
+
+    @Override
+    public Map<String, Object> loginOut(String admin, String token, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return null;
     }
 
     @Transactional
@@ -251,4 +280,70 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
+
+    /*获取菜单*/
+    @Override
+    public List<MenuVo> getMenuList(String adminToken) {
+        //通过token获取用户
+        Admin admin = dao.findByAdminToken(adminToken);
+        //通过用户获取用户组
+        int adminGroupId = admin.getAdminGroup();
+        //通过用户组获取权限
+        //获取所有拥有权限的model
+        List<AdminGroupinfo> adminGroupinfoList =
+                adminGroupinfoDao.findAdminGroupinfosByGroupIdAndGroupValueNot(adminGroupId,0);
+
+        List<Integer> modelsId = new ArrayList<>();
+        //存放查询功能集合
+        Map<Integer, List<AuthOperate>> operatelists = new HashMap<>();
+        for (AdminGroupinfo adminGroupinfo : adminGroupinfoList){
+            //拼装modelsId
+            modelsId.add(adminGroupinfo.getAuthModelId());
+            //拼装需要查询的模块下的功能排序值
+            int tenValue = adminGroupinfo.getGroupValue();
+            //将十进制转换为二进制。
+            byte[] bytes = AuthorityUtil.decimalToBinary(tenValue);
+            //用与计次
+            int byteNumber = 0;
+            List operates = new ArrayList();
+            for (byte b : bytes){
+                if (b == '1'){
+                    operates.add(byteNumber);
+                }
+                byteNumber++;
+            }
+            List<AuthOperate> operateList = authOperateDao.findAuthOperateByOperateModelAndOperateSiteInAndOperateType(adminGroupinfo.getAuthModelId(), operates, 1);
+            operatelists.put(adminGroupinfo.getAuthModelId(),operateList);
+        }
+        //查询所有权限内model
+        List<AuthModel> models = authModelDao.findAll(modelsId);
+
+
+        List<MenuVo> result = new ArrayList<>();
+        for (AuthModel authModel : models){
+            MenuVo menuVo = new MenuVo();
+            BeanUtils.copyProperties(authModel, menuVo);
+            menuVo.setModelId(authModel.getId());
+            menuVo.setOperates(operatelists.get(authModel.getId()));
+            System.out.println(menuVo);
+            result.add(menuVo);
+        }
+        //通过拥有权限的菜单.
+
+        //哦,写到这里我感觉自己太帅了！！！
+        return result;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+/*====================================*/
 }

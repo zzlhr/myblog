@@ -1,9 +1,6 @@
 package com.zzlhr.controller;
 
-import com.zzlhr.entity.Article;
-import com.zzlhr.entity.FriendLink;
-import com.zzlhr.entity.Message;
-import com.zzlhr.entity.Website;
+import com.zzlhr.entity.*;
 import com.zzlhr.service.*;
 import com.zzlhr.util.JSONUtil;
 import com.zzlhr.util.NetworkUtil;
@@ -154,8 +151,8 @@ public class PublicController {
 
 
 
-    @ResponseBody
-    @RequestMapping("/articles.json")
+//    @ResponseBody
+//    @RequestMapping("/articles.json")
     public String articles(){
         JSONArray array = JSONArray.fromObject(articleService.getCommendArticle(2,0));
         JSONObject json = new JSONObject();
@@ -252,6 +249,13 @@ public class PublicController {
             Website website = websiteService.getWebsite();
             model.addObject("website", website);
         }
+        //关于我
+//        Website website = websiteService.getWebsite();
+        About aboutMe = aboutService.getAbout();
+        model.addObject("aboutme", JSONObject.fromObject(aboutMe).toString());
+        //最新文章
+        model.addObject("leftArticles", JSONArray.fromObject(articles()).toString());
+
 
         return model;
     }

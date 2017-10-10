@@ -146,9 +146,11 @@
 //		console.log(tmodel);
         $('#articlelist').html(tmodel);
 
+        var leftarticles = ${leftArticles};
+        var aboutme = ${aboutme}
+		setAbout(aboutme);
+        setNewArticle(leftarticles);
         setFriendLink();
-        setAbout();
-        setNewArticle();
     }
 
 

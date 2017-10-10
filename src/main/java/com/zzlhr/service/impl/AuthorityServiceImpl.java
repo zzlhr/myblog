@@ -182,41 +182,41 @@ public class AuthorityServiceImpl implements AuthorityService {
         return ResultSuccessStatus.getResultSuccessMap();
     }
 
-    @Override
-    public Boolean isHaveAuthority(String uri, String admin, String token) {
-
-        //查询uri确认菜单
-        MenuDo menu = menuDoDao.findMenuDoByDoUriAndMenuStatus(uri, StatusEnum.USERING.getCode());
-
-        if (menu == null){
-            return false;
-        }
-        //查询父菜单 父菜单才是真正寸权限
-        MenuDo fMenu = menuDoDao.findOne(menu.getMenuFid());
-
-
-        //查询admin，确认admin
-        Admin admin1 = adminService.findAdmin(admin);
-        if (admin1 == null){
-            return false;
-        }
-
-        //验证登录
-        if (!token.equals(admin1.getAdminToken())){
-            return false;
-        }
-
-        //验证权限
-
-        //查询权限值
-        AdminGroupinfo groupValue = adminGroupinfoDao.findAdminGroupinfoByGroupIdAndMenuId(admin1.getAdminGroup(), fMenu.getId());
-
-//        System.out.println(groupValue);
-
-
-        if (AuthorityUtil.isHaveAuthority(groupValue.getGroupValue(), menu.getDoSerial()) == 1){
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public Boolean isHaveAuthority(String uri, String admin, String token) {
+//
+//        //查询uri确认菜单
+//        MenuDo menu = menuDoDao.findMenuDoByDoUriAndMenuStatus(uri, StatusEnum.USERING.getCode());
+//
+//        if (menu == null){
+//            return false;
+//        }
+//        //查询父菜单 父菜单才是真正寸权限
+//        MenuDo fMenu = menuDoDao.findOne(menu.getMenuFid());
+//
+//
+//        //查询admin，确认admin
+//        Admin admin1 = adminService.findAdmin(admin);
+//        if (admin1 == null){
+//            return false;
+//        }
+//
+//        //验证登录
+//        if (!token.equals(admin1.getAdminToken())){
+//            return false;
+//        }
+//
+//        //验证权限
+//
+//        //查询权限值
+//        AdminGroupinfo groupValue = adminGroupinfoDao.findAdminGroupinfoByGroupIdAndMenuId(admin1.getAdminGroup(), fMenu.getId());
+//
+////        System.out.println(groupValue);
+//
+//
+//        if (AuthorityUtil.isHaveAuthority(groupValue.getGroupValue(), menu.getDoSerial()) == 1){
+//            return true;
+//        }
+//        return false;
+//    }
 }

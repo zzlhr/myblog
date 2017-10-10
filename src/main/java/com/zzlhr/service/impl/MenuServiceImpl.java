@@ -28,34 +28,34 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private AdminGroupinfoDao adminGroupinfoDao;
 
-    @Override
-    public Map<String, Object> getMenuList(String admin) {
-        //获取用户
-        Admin admin1 = adminService.findAdmin(admin);
-        //获取用户权限组
-        Integer groupId = admin1.getAdminGroup();
-        //获取权限组记录
-        List<AdminGroupinfo> adminGroupinfoList =
-                adminGroupinfoDao.findAdminGroupinfosByGroupId(groupId);
-
-        //带查询菜单列表
-        List<Integer> selectMenuList = new ArrayList<>();
-
-        //循环获取所有不为0的菜单
-        for (AdminGroupinfo adminGroupinfo : adminGroupinfoList){
-            if (adminGroupinfo.getGroupValue() > 0){
-                selectMenuList.add(adminGroupinfo.getMenuId());
-            }
-        }
-
-        //查询所有菜单
-        List<MenuDo> menuDos = menuDoDao.findAll(selectMenuList);
-
-        Map<String, Object> result = ResultSuccessStatus.getResultSuccessMap();
-        result.put("data", menuDos);
-
-        return result;
-    }
+//    @Override
+//    public Map<String, Object> getMenuList(String admin) {
+//        //获取用户
+//        Admin admin1 = adminService.findAdmin(admin);
+//        //获取用户权限组
+//        Integer groupId = admin1.getAdminGroup();
+//        //获取权限组记录
+//        List<AdminGroupinfo> adminGroupinfoList =
+//                adminGroupinfoDao.findAdminGroupinfosByGroupId(groupId);
+//
+//        //带查询菜单列表
+//        List<Integer> selectMenuList = new ArrayList<>();
+//
+//        //循环获取所有不为0的菜单
+//        for (AdminGroupinfo adminGroupinfo : adminGroupinfoList){
+//            if (adminGroupinfo.getGroupValue() > 0){
+//                selectMenuList.add(adminGroupinfo.getMenuId());
+//            }
+//        }
+//
+//        //查询所有菜单
+//        List<MenuDo> menuDos = menuDoDao.findAll(selectMenuList);
+//
+//        Map<String, Object> result = ResultSuccessStatus.getResultSuccessMap();
+//        result.put("data", menuDos);
+//
+//        return result;
+//    }
 
 
 

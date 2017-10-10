@@ -141,10 +141,11 @@
     var friendLinks = ${friendLinks};
 
     function init() {
-
-        setAbout();
+        var leftarticles = ${leftArticles};
+        var aboutme = ${aboutme};
+        setAbout(aboutme);
+        setNewArticle(leftarticles);
         setFriendLink();
-        setNewArticle();
     }
 
     init();
