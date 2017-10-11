@@ -36,16 +36,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> getArticleList(String keyword, int page) {
+    public Page<Article> getArticleList(String keyword, int page) {
         if ("".equals(keyword) || keyword == null){
             return articleDao.findAll(new PageRequest(page - 1, 10,
-                    new Sort(Sort.Direction.DESC, "id"))).getContent();
+                    new Sort(Sort.Direction.DESC, "id")));
         }
         return articleDao.findByArticleKeywordLike(
                 keyword,
                 new PageRequest(page - 1, 10,
-                        new Sort(Sort.Direction.DESC, "id")))
-                .getContent();
+                        new Sort(Sort.Direction.DESC, "id")));
     }
 
     @Override

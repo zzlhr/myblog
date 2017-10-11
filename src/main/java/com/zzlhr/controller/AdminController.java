@@ -1,15 +1,13 @@
 package com.zzlhr.controller;
 
 import com.google.gson.Gson;
-import com.zzlhr.entity.Admin;
-import com.zzlhr.entity.Article;
-import com.zzlhr.entity.MenuDo;
-import com.zzlhr.entity.MyApp;
+import com.zzlhr.entity.*;
 import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.service.ArticleService;
+import com.zzlhr.service.FriendLinkService;
 import com.zzlhr.service.MenuService;
 import com.zzlhr.util.*;
 import com.zzlhr.vo.LayuiUploadDataVo;
@@ -57,6 +55,9 @@ public class AdminController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private FriendLinkService friendLinkService;
 
 
     @Autowired
@@ -344,8 +345,6 @@ public class AdminController {
             article.setArticleStatus(1);
         }
 
-
-
         try {
             articleService.saveArticle(article);
         }catch (Exception e){
@@ -361,7 +360,17 @@ public class AdminController {
     }
 
 
-
+    @GetMapping("/findFriendLinkList.html")
+    public ModelAndView page_findFriendLinkList(HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/findFriendLinkList");
+        mv = init(mv, request);
+        List<FriendLink> friendLinks = friendLinkService.getAllFrinedLink();
+        String friendLinksJson = JSONUtil.formatDate(JSONArray.fromObject(friendLinks),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString();
+        mv.addObject("friendLinks", friendLinksJson);
+        return mv;
+    }
 
 
 

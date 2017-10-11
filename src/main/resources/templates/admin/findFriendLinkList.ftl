@@ -1,39 +1,8 @@
 <#include "header.ftl" />
 <!-- 内容主体区域 -->
 <div style="padding: 15px;">
-    <div style="padding: 15px;">
-        <div class="layui-row">
-            <form class="layui-col-lg11" method="get" action="findArticleLst.html">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">标题关键字</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="keyword" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input">
-                    </div>
-                    <input type="submit" value="查询" class="layui-btn">
-                </div>
-            </form>
-            <a href="addArticle.html" class="layui-btn">添加</a>
-        </div>
+    <div id="friendlinks" class="layui-row">
 
-
-        <table class="layui-table">
-            <thead>
-            <tr>
-                <th>序号</th>
-                <th>链接名称</th>
-                <th>链接地址</th>
-                <th>添加管理员</th>
-                <th>状态</th>
-                <th>位置</th>
-                <th>添加时间</th>
-                <th>更新时间</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody id="friendLinkTbody">
-
-            </tbody>
-        </table>
     </div>
 </div>
 <#include "foot.ftl" />
@@ -41,6 +10,8 @@
 <script>
 
     var menuJson = ${menus};
+    var friendLinks = ${friendLinks}
+
     function menuShow() {
         var code = '';
         for (var i=0;i<menuJson.length;i++){
@@ -65,7 +36,19 @@
         $("#menunav").html(code);
     }
     menuShow();
+    
+    function setDate() {
+        var model = '<span id="f{{id}}" class="layui-badge layui-bg-blue" style="font-size: 30px;">{{name}}</span>';
+        var code = '';
+        for(var i=0; i<friendLinks.length; i++){
+            code += model.replace("{{id}}", i).replace("{{name}}", friendLinks[i].linkValue);
+        }
 
+        $("#friendlinks").html(code);
+
+    }
+
+    setDate();
 
     //JavaScript代码区域
     layui.use('element', function(){
