@@ -4,16 +4,17 @@ import com.google.gson.Gson;
 import com.zzlhr.entity.Admin;
 import com.zzlhr.entity.Article;
 import com.zzlhr.entity.MenuDo;
+import com.zzlhr.entity.MyApp;
 import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.service.ArticleService;
 import com.zzlhr.service.MenuService;
-import com.zzlhr.util.CookieUtils;
-import com.zzlhr.util.JSONUtil;
-import com.zzlhr.util.NetworkUtil;
-import com.zzlhr.util.RequestUtil;
+import com.zzlhr.util.*;
+import com.zzlhr.vo.LayuiUploadDataVo;
+import com.zzlhr.vo.LayuiUploadVo;
+import javassist.compiler.ast.Keyword;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -21,10 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -59,6 +58,10 @@ public class AdminController {
     private ArticleService articleService;
 
 
+    @Autowired
+    private MyApp myApp;
+
+
     Gson gson = new Gson();
 
     private Map<String, Object> errorRequst = new HashMap<>();
@@ -89,21 +92,6 @@ public class AdminController {
     }
 
 
-    @RequestMapping("/login.do")
-    public String login(String admin, String password, HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException {
-        JSONObject json = JSONObject.fromObject(adminService.login(admin, password, NetworkUtil.getIpAddress(request)));
-        if (json.getInt("code") == LoginEnum.SUCCESS.getCode()){
-            /*登录名*/
-            response.addCookie(new Cookie("admin", json.getString("admin")));
-            /*token*/
-            response.addCookie(new Cookie("token", json.getString("token")));
-            /*登录时间*/
-            response.addCookie(new Cookie("lt", String.valueOf(new Date().getTime())));
-            return "redirect:/admin/index.html";
-        }
-//        return gson.toJson(json);
-        return "<script>alert(\"用户名或密码错误!\");</script>";
-    }
 
     @ResponseBody
     @RequestMapping("/admin_add.do")
@@ -215,8 +203,133 @@ public class AdminController {
 
 
     @RequestMapping("/login.html")
-    public ModelAndView login(){
+    public ModelAndView pageLogin(){
         ModelAndView mv = new ModelAndView("admin/login");
         return mv;
     }
+
+    @RequestMapping("/login.do")
+    public String login(String admin, String password,
+                        HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException {
+        JSONObject json = JSONObject.fromObject(adminService.login(admin, password, NetworkUtil.getIpAddress(request)));
+        if (json.getInt("code") == LoginEnum.SUCCESS.getCode()){
+            /*登录名*/
+            response.addCookie(new Cookie("admin", json.getString("admin")));
+            /*token*/
+            response.addCookie(new Cookie("token", json.getString("token")));
+            /*登录时间*/
+            response.addCookie(new Cookie("lt", String.valueOf(new Date().getTime())));
+            return "redirect:/admin/index.html";
+        }
+//        return gson.toJson(json);
+        return "<script>alert(\"用户名或密码错误!\");</script>";
+    }
+
+    @RequestMapping("/index.html")
+    public ModelAndView pageIndex(HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/index");
+        mv = init(mv,request);
+        return mv;
+    }
+
+
+    @RequestMapping("/findArticleLst.html")
+    public ModelAndView findArticleLst(
+            @RequestParam(required = false, name = "page",defaultValue = "1") Integer page,
+            @RequestParam(required = false, name = "keyword", defaultValue = "") String keyword,
+            HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/findArticleLst");
+        List<Article> result = articleService.getArticleList("%"+keyword+"%",page);
+        mv.addObject("articleList", JSONUtil.formatDate(JSONArray.fromObject(result),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString());
+        mv = init(mv,request);
+        return mv;
+    }
+
+    @GetMapping("/addArticle.html")
+    public ModelAndView page_addArticle(HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/addArticle");
+        mv = init(mv, request);
+        return mv;
+    }
+
+    @PostMapping("/addArticle.html")
+    public ModelAndView addArticle(String title, String clazz,
+                                   Integer commend, String keyword, String describe,
+                                   String content, HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/result");
+
+        Article article = new Article();
+        article.setArticleTitle(title);
+        article.setArticleClass(clazz);
+        article.setArticleCommend(commend);
+        article.setArticleKeyword(keyword);
+        article.setArticleDescribe(describe);
+        article.setArticleText(content);
+        article.setArticleAdmin(CookieUtils.getCookieValue(request,"admin"));
+        try {
+            articleService.saveArticle(article);
+        }catch (Exception e){
+            mv.addObject("message","添加文章失败:"+e.getMessage());
+            mv.addObject("href", "javascript:history.back(-1)");
+        }
+        mv.addObject("message", "添加文章成功");
+        mv.addObject("href", "findArticleLst.html");
+
+        mv = init(mv, request);
+        return mv;
+    }
+
+
+    /**
+     * 添加文章富文本对接上传接口
+     * @param file
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/addArticleUpdate")
+    public String addArticleUpdate(MultipartFile file, HttpServletRequest request){
+
+        LayuiUploadVo uploadVo = new LayuiUploadVo();
+        LayuiUploadDataVo uploadDataVo = new LayuiUploadDataVo();
+
+        String contentType = file.getContentType();
+//        String fileName = file.getOriginalFilename();
+        String fileName = FileUtil.makeRandomName() + "."
+                + FileUtil.GetFileSuffix(file.getContentType());
+//        String filePath = request.getSession().getServletContext().getRealPath("articleImage/");
+        String filePath = myApp.getArticle().get("uploadpath");
+        System.out.println(filePath);
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+        } catch (Exception e) {
+            // TODO: handle exception
+            uploadVo.setCode(1);
+            uploadVo.setMsg(e.getMessage());
+        }
+
+        uploadDataVo.setSrc("../articleImage/"+fileName);
+        uploadDataVo.setTitle(fileName);
+        uploadVo.setCode(0);
+        uploadVo.setMsg("上传成功");
+        uploadVo.setData(uploadDataVo);
+
+        //返回json
+        return JSONObject.fromObject(uploadVo).toString();
+    }
+
+
+
+    public ModelAndView init(ModelAndView mv, HttpServletRequest request){
+        //查询菜单
+        String token = CookieUtils.getCookie(request, "token").getValue();
+        mv.addObject("menus", JSONArray.fromObject(adminService.getMenuList(token)).toString());
+
+        return mv;
+    }
+
+
+
 }

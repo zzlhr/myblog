@@ -23,13 +23,26 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao;
 
     @Override
-    public List<Article> getArticleList(String keyword, int page) {
+    public List<Article> getArticleListShow(String keyword, int page) {
         if ("".equals(keyword) || keyword == null){
             return articleDao.findAll(new PageRequest(page - 1, 10,
                     new Sort(Sort.Direction.DESC, "id"))).getContent();
         }
         return articleDao.findByArticleKeywordLikeAndArticleStatus(
                 keyword, 0,
+                new PageRequest(page - 1, 10,
+                        new Sort(Sort.Direction.DESC, "id")))
+                .getContent();
+    }
+
+    @Override
+    public List<Article> getArticleList(String keyword, int page) {
+        if ("".equals(keyword) || keyword == null){
+            return articleDao.findAll(new PageRequest(page - 1, 10,
+                    new Sort(Sort.Direction.DESC, "id"))).getContent();
+        }
+        return articleDao.findByArticleKeywordLike(
+                keyword,
                 new PageRequest(page - 1, 10,
                         new Sort(Sort.Direction.DESC, "id")))
                 .getContent();

@@ -47,7 +47,7 @@ public class Article implements Serializable{
   private Integer articleCommend;
 
   /** 文章状态 0为显示，1为隐藏，3为删除 */
-  private Integer articleStatus;
+  private Integer articleStatus = 0;
 
   @Column(updatable = false, insertable = false)
   private Date createTime;

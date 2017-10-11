@@ -44,6 +44,12 @@ spring:
 weixin:
   appId: wx1f84b7fc8c0dfe33
   AppSecret: 820489c3b2a8b3463c1083ecd5f53a80
+
+
+
+myapp:
+  article:
+    uploadpath: /Users/lhr/Desktop/blogUpload/articleImage/
 #server:
 #  port: 80
 

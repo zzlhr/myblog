@@ -15,6 +15,7 @@ import com.zzlhr.vo.PageListData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -283,6 +284,7 @@ public class AdminServiceImpl implements AdminService {
 
     /*获取菜单*/
     @Override
+    @Cacheable(value = "adminMenu")
     public List<MenuVo> getMenuList(String adminToken) {
         //通过token获取用户
         Admin admin = dao.findByAdminToken(adminToken);

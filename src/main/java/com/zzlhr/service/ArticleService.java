@@ -18,6 +18,8 @@ public interface ArticleService {
      * @param page          页数
      * @return
      */
+    List<Article> getArticleListShow(String keyword, int page);
+
     List<Article> getArticleList(String keyword, int page);
 
     /** 获取推荐文章列表 */
