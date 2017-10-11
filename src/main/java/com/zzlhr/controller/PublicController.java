@@ -16,13 +16,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +51,8 @@ public class PublicController {
     @Autowired
     private WebsiteService websiteService;
 
+    @Autowired
+    private MyApp myApp;
 
 
 
@@ -243,7 +245,6 @@ public class PublicController {
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString();
         model.addObject("friendLinks",friendLinks);
-        System.out.println("viewname"+model.getViewName());
         //添加网站基本信息
         if (model.getViewName() != "article"){
             Website website = websiteService.getWebsite();
@@ -273,6 +274,32 @@ public class PublicController {
         }
         return "获取失败";
     }
+
+
+    /**
+     * 返回图片
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("/articleImage/*")
+    public void getArticleImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String url = request.getRequestURL().toString();
+        System.out.println("[url]:"+url);
+        File fileImage = new File(myApp.getArticle().get("uploadpath") +
+                url.split("/")[url.split("/").length-1]);
+        FileInputStream inputStream = new FileInputStream(fileImage);
+        byte[] data = new byte[(int)fileImage.length()];
+        int length = inputStream.read(data);
+        inputStream.close();
+
+        response.setContentType("image/png");
+        OutputStream stream = response.getOutputStream();
+        stream.write(data);
+        stream.flush();
+        stream.close();
+    }
+
 
 
 }

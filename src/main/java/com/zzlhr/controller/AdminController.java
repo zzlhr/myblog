@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -239,10 +240,13 @@ public class AdminController {
             @RequestParam(required = false, name = "keyword", defaultValue = "") String keyword,
             HttpServletRequest request){
         ModelAndView mv = new ModelAndView("admin/findArticleLst");
-        List<Article> result = articleService.getArticleList("%"+keyword+"%",page);
-        mv.addObject("articleList", JSONUtil.formatDate(JSONArray.fromObject(result),
+        Page<Article> result = articleService.getArticleList("%"+keyword+"%",page);
+        mv.addObject("articleList", JSONUtil.formatDate(JSONArray.fromObject(result.getContent()),
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
                 .toString());
+        mv.addObject("count",result.getTotalElements());//总记录数
+        mv.addObject("totalPage", result.getTotalPages());//总页数
+        mv.addObject("page",page);//当前页数
         mv = init(mv,request);
         return mv;
     }
@@ -254,9 +258,22 @@ public class AdminController {
         return mv;
     }
 
+    /**
+     * 添加文章接口
+     * @param title     标题
+     * @param clazz     分类
+     * @param commend   推荐
+     * @param keyword   关键字
+     * @param describe  描述
+     * @param content   内容
+     * @param request
+     * @return
+     */
     @PostMapping("/addArticle.html")
     public ModelAndView addArticle(String title, String clazz,
-                                   Integer commend, String keyword, String describe,
+                                   Integer commend,
+                                   @RequestParam(required = false, defaultValue = "off", name = "status")
+                                               String status, String keyword, String describe,
                                    String content, HttpServletRequest request){
         ModelAndView mv = new ModelAndView("admin/result");
 
@@ -268,11 +285,17 @@ public class AdminController {
         article.setArticleDescribe(describe);
         article.setArticleText(content);
         article.setArticleAdmin(CookieUtils.getCookieValue(request,"admin"));
+        if ("on".equals(status)){
+            article.setArticleStatus(0);
+        }else {
+            article.setArticleStatus(1);
+        }
         try {
             articleService.saveArticle(article);
         }catch (Exception e){
             mv.addObject("message","添加文章失败:"+e.getMessage());
             mv.addObject("href", "javascript:history.back(-1)");
+            return mv;
         }
         mv.addObject("message", "添加文章成功");
         mv.addObject("href", "findArticleLst.html");
@@ -280,6 +303,70 @@ public class AdminController {
         mv = init(mv, request);
         return mv;
     }
+
+
+    @GetMapping("/updateArticle.html")
+    public ModelAndView page_updateArticle(Integer id, HttpServletRequest request){
+
+        ModelAndView mv = new ModelAndView("admin/updateArticle");
+
+        Article article = articleService.getArticleDetails(id);
+
+        String articelJson = JSONUtil.formatDate(JSONObject.fromObject(article),
+                new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
+                .toString();
+
+        mv.addObject("article", articelJson);
+        mv = init(mv, request);
+        return mv;
+    }
+
+
+    @PostMapping("/updateArticle.html")
+    public ModelAndView updateArticle(Integer id, String title, String clazz,
+                                   Integer commend,
+                                   @RequestParam(required = false, defaultValue = "off", name = "status")
+                                          String status, String keyword, String describe,
+                                   String content, HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/result");
+
+        Article article = articleService.getArticleDetails(id);
+        article.setArticleTitle(title);
+        article.setArticleClass(clazz);
+        article.setArticleCommend(commend);
+        article.setArticleKeyword(keyword);
+        article.setArticleDescribe(describe);
+        article.setArticleText(content);
+        article.setArticleAdmin(CookieUtils.getCookieValue(request,"admin"));
+        if ("on".equals(status)){
+            article.setArticleStatus(0);
+        }else {
+            article.setArticleStatus(1);
+        }
+
+
+
+        try {
+            articleService.saveArticle(article);
+        }catch (Exception e){
+            mv.addObject("message","修改文章失败:"+e.getMessage());
+            mv.addObject("href", "javascript:history.back(-1)");
+            return mv;
+        }
+        mv.addObject("message", "修改文章成功");
+        mv.addObject("href", "findArticleLst.html");
+
+        mv = init(mv, request);
+        return mv;
+    }
+
+
+
+
+
+
+
+
 
 
     /**
@@ -301,7 +388,6 @@ public class AdminController {
                 + FileUtil.GetFileSuffix(file.getContentType());
 //        String filePath = request.getSession().getServletContext().getRealPath("articleImage/");
         String filePath = myApp.getArticle().get("uploadpath");
-        System.out.println(filePath);
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, fileName);
         } catch (Exception e) {

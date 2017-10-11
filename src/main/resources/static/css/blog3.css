@@ -37,3 +37,9 @@
 	background-color: white;
 	border: solid #D3D4D3 1px;
 }
+.blog-login-div{
+	width: 500px;
+	height:300px;
+	margin: auto !important;
+	/*padding: 10px;*/
+}

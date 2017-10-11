@@ -33,6 +33,9 @@
 
                 </tbody>
             </table>
+
+            <div id="page"></div>
+
         </div>
 <#include "foot.ftl"/>
 
@@ -43,7 +46,7 @@
     function dataShow() {
         var model = "<tr><td>{{id}}</td><td>{{title}}</td><td>{{admin}}</td><td>{{keyword}}</td>" +
                 "<td>{{click}}</td><td>{{class}}</td><td>{{status}}</td><td>{{updatetime}}</td><td>" +
-                "<button>修改</button></td></tr>";
+                "<a class='layui-btn-small' href='updateArticle.html?id={{id}}'>修改</a></td></tr>";
         var rec = '';
         for (var i = 0; i < articleList.length; i++){
             var article = articleList[i];
@@ -58,7 +61,8 @@
                     .replace("{{click}}", article.articleClick)
                     .replace("{{class}}",article.articleClass)
                     .replace("{{status}}",status)
-                    .replace("{{updatetime}}", article.updateTime);
+                    .replace("{{updatetime}}", article.updateTime)
+                    .replace("{{id}}",article.id);
         }
         $("#articleTbody").html(rec);
     }
@@ -91,8 +95,36 @@
 
     //JavaScript代码区域
     layui.use('element', function(){
-        var element = layui.element;
+        var element = layui.element
     });
+
+    $("#page").pagination({
+        currentPage: ${page},// 当前页数
+        totalPage: ${totalPage},// 总页数
+        isShow: true,// 是否显示首尾页
+        count: 5,// 显示个数
+        homePageText: "首页",// 首页文本
+        endPageText: "尾页",// 尾页文本
+        prevPageText: "上一页",// 上一页文本
+        nextPageText: "下一页",// 下一页文本
+        callback: function(current) {
+            // 回调,current(当前页数)
+            console.log("current:"+current)
+            window.location.href = changeUrlArg(window.location.href, "page", current);
+        }
+    });
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    function changeUrlArg(url, arg, val){
+        var pattern = arg+'=([^&]*)';
+        var replaceText = arg+'='+val;
+        return url.match(pattern) ? url.replace(eval('/('+ arg+'=)([^&]*)/gi'), replaceText) : (url.match('[\?]') ? url+'&'+replaceText : url+'?'+replaceText);
+    }
 </script>
 </body>
 </html>

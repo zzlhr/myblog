@@ -1,42 +1,43 @@
 <#include "header.ftl" />
 <!-- 内容主体区域 -->
 <div style="padding: 15px;">
-    <form class="layui-form" action="addArticle.html", method="post">
+    <form class="layui-form" action="updateArticle.html", method="post">
+        <input class="layui-hide" id="ide" name="id", value="">
         <div class="layui-form-item">
             <label class="layui-form-label">文章标题</label>
             <div class="layui-input-inline">
-                <input type="text" name="title" autocomplete="off" class="layui-input" placeholder="请输入标题">
+                <input type="text" name="title" id="title" autocomplete="off" class="layui-input" placeholder="请输入标题">
             </div>
             <label class="layui-form-label">文章分类</label>
             <div class="layui-input-inline">
-                <input type="text" name="clazz" autocomplete="off" class="layui-input" placeholder="请输入文章分类">
+                <input type="text" name="clazz" id="clazz" autocomplete="off" class="layui-input" placeholder="请输入文章分类">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">推荐</label>
             <div class="layui-input-block">
-                <input type="radio" name="commend" value="0" title="不推荐" checked="">
-                <input type="radio" name="commend" value="1" title="推荐到首页">
-                <input type="radio" name="commend" value="2" title="推荐到右侧">
+                <input type="radio" name="commend" value="0" id="t0" title="不推荐">
+                <input type="radio" name="commend" value="1" id="t1" title="推荐到首页">
+                <input type="radio" name="commend" value="2" id="t2" title="推荐到右侧">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">是否显示</label>
             <div class="layui-input-block">
-                <input type="checkbox" name="status" checked="" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
+                <input type="checkbox" name="status" id="status" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">文章关键字</label>
             <div class="layui-input-block">
-                <input type="text" name="keyword" lay-verify="title" autocomplete="off" placeholder="请输入文章关键字" class="layui-input">
+                <input type="text" name="keyword" id="keyword" lay-verify="title" autocomplete="off" placeholder="请输入文章关键字" class="layui-input">
             </div>
 
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">文章描述</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入文章描述" name="describe" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入文章描述" id="describe" name="describe" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -47,7 +48,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <input class="layui-btn" type="submit" value="发表">
+                <input class="layui-btn" type="submit" value="修改">
             </div>
         </div>
     </form>
@@ -57,6 +58,9 @@
 <script>
 
     var menuJson = ${menus};
+
+    var articled = ${article}
+
     function menuShow() {
         var code = '';
         for (var i=0;i<menuJson.length;i++){
@@ -82,7 +86,7 @@
     }
     menuShow();
 
-
+    setArticle();
     layui.use(['form', 'layedit', 'laydate'], function(){
         var form = layui.form
                 ,layer = layui.layer
@@ -116,31 +120,37 @@
                 ,'help' //帮助
             ]
         });
-//
-//        //自定义验证规则
-//        form.verify({
-//            title: function(value){
-//                if(value.length < 5){
-//                    return '标题至少得5个字符啊';
-//                }
-//            }
-//            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-//            ,content: function(value){
-//                layedit.sync(editIndex);
-//            }
-//        });
-
-
-//        //监听提交
-//        form.on('submit(demo1)', function(data){
-//            layer.alert(JSON.stringify(data.field), {
-//                title: '最终的提交信息'
-//            })
-//            return false;
-//        });
-
 
     });
+    
+    
+    function setArticle() {
+        $("#ide").val(GetQueryString("id"));
+        $("#title").val(articled.articleTitle);
+        $("#clazz").val(articled.articleClass);
+        if(articled.articleCommend === 0){
+            $("#t0").attr("checked","")
+        }else if (articled.articleCommend === 1){
+            $("#t1").attr("checked","")
+        }else if (articled.articleCommend === 2){
+            $("#t2").attr("checked","")
+        }
+        $("#keyword").val(articled.articleKeyword);
+        $("#describe").val(articled.articleDescribe);
+        $("#LAY_demo_editor").val(articled.articleText);
+        if(articled.articleStatus == 0){
+            $("#status").attr("checked","")
+        }
+
+
+    }
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
 </script>
 </body>
 </html>

@@ -6,4 +6,5 @@
 </div>
 </div>
 <script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.pagination.min.js"></script>
 <script src="../layui/layui.js"></script>

@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>博客后台管理</title>
     <link rel="stylesheet" href="../layui/css/layui.css">
+    <!-- 分页插件 -->
+    <link rel="stylesheet" href="../css/jquery.pagination.css">
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+
 </head>
 
 <body class="layui-layout-body">

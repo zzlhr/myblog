@@ -38,13 +38,13 @@ public class Article implements Serializable{
 
   @Column(insertable = false)
   /** 文章点赞数 */
-  private Integer articlePraise;
+  private Integer articlePraise = 0;
 
   /** 文章分类 */
-  private String articleClass;
+  private String articleClass = "未分类";
 
   /** 文章推荐 0.不推荐，1.推荐到首页，2为推荐到右侧列表 */
-  private Integer articleCommend;
+  private Integer articleCommend = 0;
 
   /** 文章状态 0为显示，1为隐藏，3为删除 */
   private Integer articleStatus = 0;
