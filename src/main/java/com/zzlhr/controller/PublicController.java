@@ -1,5 +1,6 @@
 package com.zzlhr.controller;
 
+
 import com.zzlhr.entity.*;
 import com.zzlhr.service.*;
 import com.zzlhr.util.JSONUtil;
@@ -60,11 +61,11 @@ public class PublicController {
     public ModelAndView index(){
         ModelAndView model = new ModelAndView("index");
 
-        /* 推荐友链 */
+    /* 推荐友链 */
         model = getFriendLinks(model);
 
 
-        /* 推荐首页文章 */
+    /* 推荐首页文章 */
         List<Article> comments = articleService.getCommendArticle(1,0);
         List<ArticleListVo> result = new ArrayList<>();
 
@@ -85,7 +86,7 @@ public class PublicController {
 
         ModelAndView model = new ModelAndView("article");
 
-        /* 推荐友链 */
+    /* 推荐友链 */
         model = getFriendLinks(model);
 
         //查询文章详情
@@ -119,7 +120,7 @@ public class PublicController {
 
         ModelAndView model = new ModelAndView("articles");
 
-        /* 推荐友链 */
+    /* 推荐友链 */
         model = getFriendLinks(model);
 
         Page<Article> articlePage = articleService.getArticleToClass(cs, page);
@@ -153,7 +154,7 @@ public class PublicController {
 
 
 
-//    @ResponseBody
+    //    @ResponseBody
 //    @RequestMapping("/articles.json")
     public String articles(){
         JSONArray array = JSONArray.fromObject(articleService.getCommendArticle(2,0));
@@ -177,7 +178,7 @@ public class PublicController {
     public ModelAndView about(){
         ModelAndView model = new ModelAndView("about");
 
-        /* 推荐友链 */
+    /* 推荐友链 */
         model = getFriendLinks(model);
 
         return model;
@@ -189,7 +190,7 @@ public class PublicController {
         //创建model对象
         ModelAndView model = new ModelAndView("message");
 
-        /* 推荐友链 */
+    /* 推荐友链 */
         model = getFriendLinks(model);
 
 
@@ -210,7 +211,7 @@ public class PublicController {
     public ModelAndView works(){
         ModelAndView model = new ModelAndView("works");
 
-        /* 推荐友链 */
+    /* 推荐友链 */
         model = getFriendLinks(model);
 
         return model;
@@ -239,7 +240,7 @@ public class PublicController {
      * @return
      */
     public ModelAndView getFriendLinks(ModelAndView model){
-        /* 友链 */
+    /* 友链 */
         List<FriendLink> friendLinklist = friendLinkService.getAllFrinedLink();
         String friendLinks = JSONUtil.formatDate(JSONArray.fromObject(friendLinklist),
                 new String[]{"updateTime", "createTime"}, "yyyy-MM-dd HH:mm:ss")
@@ -290,7 +291,6 @@ public class PublicController {
                 url.split("/")[url.split("/").length-1]);
         FileInputStream inputStream = new FileInputStream(fileImage);
         byte[] data = new byte[(int)fileImage.length()];
-        int length = inputStream.read(data);
         inputStream.close();
 
         response.setContentType("image/png");
@@ -303,3 +303,4 @@ public class PublicController {
 
 
 }
+

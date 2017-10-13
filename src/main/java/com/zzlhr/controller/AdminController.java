@@ -235,7 +235,7 @@ public class AdminController {
     }
 
 
-    @RequestMapping("/findArticleLst.html")
+    @RequestMapping(value = "/findArticleLst.html")
     public ModelAndView findArticleLst(
             @RequestParam(required = false, name = "page",defaultValue = "1") Integer page,
             @RequestParam(required = false, name = "keyword", defaultValue = "") String keyword,
@@ -394,7 +394,7 @@ public class AdminController {
         String contentType = file.getContentType();
 //        String fileName = file.getOriginalFilename();
         String fileName = FileUtil.makeRandomName() + "."
-                + FileUtil.GetFileSuffix(file.getContentType());
+                + FileUtil.GetFileSuffix(contentType);
 //        String filePath = request.getSession().getServletContext().getRealPath("articleImage/");
         String filePath = myApp.getArticle().get("uploadpath");
         try {
