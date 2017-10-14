@@ -50,6 +50,9 @@ weixin:
 myapp:
   article:
     uploadpath: /Users/lhr/Desktop/blogUpload/articleImage/
+  project:
+    host: http://localhost:8080
+
 #server:
 #  port: 80
 

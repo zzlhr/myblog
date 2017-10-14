@@ -15,4 +15,5 @@ import java.util.Map;
 @Data
 public class MyApp {
     private Map<String, String> article;
+    private Map<String, String> project;
 }

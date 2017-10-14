@@ -9,16 +9,14 @@ public class AuthorityUtil {
     /**
      * 权限算法，第一个参数是权限值，第二个值是对应位置
      * @param number    权限值
-     * @param menuDoId  对应位置（操作id）
-     * @return          该位置的值
+     * @param serialNumber  对应位置
+     * @return 该位置的值，1为拥有权限
      */
-    public static Integer isHaveAuthority(Integer number, Integer menuDoId){
-//        System.out.println(number + "----" + menuDoId);
+    public static Integer isHaveAuthority(Integer number, Integer serialNumber){
         //无敌的与运算，直接出权限
-        Integer result = (number >> menuDoId) & 1;
+        Integer result = (number >> serialNumber) & 1;
         System.out.println(result);
         return result;
-
     }
 
     /**

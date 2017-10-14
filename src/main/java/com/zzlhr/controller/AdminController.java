@@ -374,10 +374,6 @@ public class AdminController {
 
 
 
-
-
-
-
     /**
      * 添加文章富文本对接上传接口
      * @param file
@@ -421,7 +417,6 @@ public class AdminController {
         //查询菜单
         String token = CookieUtils.getCookie(request, "token").getValue();
         mv.addObject("menus", JSONArray.fromObject(adminService.getMenuList(token)).toString());
-
         return mv;
     }
 

@@ -11,6 +11,10 @@ import java.util.List;
 public interface AdminGroupinfoDao extends JpaRepository<AdminGroupinfo, Integer>{
 
 
-    List<AdminGroupinfo> findAdminGroupinfosByGroupIdAndGroupValueNot(Integer groupId, Integer groupValue);
+    List<AdminGroupinfo> findAdminGroupinfosByGroupIdAndGroupValueNot(Integer groupId,
+                                                                      Integer groupValue);
+
+    AdminGroupinfo findAdminGroupinfoByAuthModelIdAndGroupId(Integer authModelId,
+                                                                Integer groupId);
 
 }

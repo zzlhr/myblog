@@ -5,6 +5,7 @@ import com.zzlhr.vo.MenuVo;
 import com.zzlhr.vo.PageListData;
 import org.springframework.data.domain.PageRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -35,7 +36,6 @@ public interface AdminService {
 
     Admin findAdmin(String admin);
 
-    @Transactional
     Map<String, Object> login(String admin, String password, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 
     Map<String, Object> updateAdminPassword(String admin, String oldPassword, String newPassword, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException;
@@ -52,5 +52,14 @@ public interface AdminService {
 
     /** 获取菜单 */
     List<MenuVo> getMenuList(String adminToken);
+
+    /**
+     * 验证用户登录
+     * @param request
+     * @return true为验证成功，false为失败，需要后续跳转到登录页面。
+     */
+    Boolean verifyLogin(HttpServletRequest request);
+
+
 
 }

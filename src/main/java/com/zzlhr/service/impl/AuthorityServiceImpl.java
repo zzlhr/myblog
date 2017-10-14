@@ -1,26 +1,24 @@
 package com.zzlhr.service.impl;
 
-import com.zzlhr.dao.AdminDao;
-import com.zzlhr.dao.AdminGroupDao;
-import com.zzlhr.dao.AdminGroupinfoDao;
-import com.zzlhr.dao.MenuDoDao;
-import com.zzlhr.entity.Admin;
-import com.zzlhr.entity.AdminGroup;
-import com.zzlhr.entity.AdminGroupinfo;
-import com.zzlhr.entity.MenuDo;
+import com.zzlhr.dao.*;
+import com.zzlhr.entity.*;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
 import com.zzlhr.enums.StatusEnum;
 import com.zzlhr.service.AdminService;
 import com.zzlhr.service.AuthorityService;
 import com.zzlhr.util.AuthorityUtil;
+import com.zzlhr.util.CookieUtils;
 import com.zzlhr.vo.PageListData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +38,16 @@ public class AuthorityServiceImpl implements AuthorityService {
     private AdminGroupDao adminGroupDao;
     @Autowired
     private AdminGroupinfoDao adminGroupinfoDao;
+    @Autowired
+    private MyApp myApp;
+    @Autowired
+    private AuthOperateDao authOperateDao;
+    @Autowired
+    private AuthModelDao authModelDao;
+
+
+
+
 
     Map<String, Object> result = new HashMap<>();
 
@@ -182,41 +190,65 @@ public class AuthorityServiceImpl implements AuthorityService {
         return ResultSuccessStatus.getResultSuccessMap();
     }
 
-//    @Override
-//    public Boolean isHaveAuthority(String uri, String admin, String token) {
-//
-//        //查询uri确认菜单
-//        MenuDo menu = menuDoDao.findMenuDoByDoUriAndMenuStatus(uri, StatusEnum.USERING.getCode());
-//
-//        if (menu == null){
-//            return false;
-//        }
-//        //查询父菜单 父菜单才是真正寸权限
-//        MenuDo fMenu = menuDoDao.findOne(menu.getMenuFid());
-//
-//
-//        //查询admin，确认admin
-//        Admin admin1 = adminService.findAdmin(admin);
-//        if (admin1 == null){
-//            return false;
-//        }
-//
-//        //验证登录
-//        if (!token.equals(admin1.getAdminToken())){
-//            return false;
-//        }
-//
-//        //验证权限
-//
-//        //查询权限值
-//        AdminGroupinfo groupValue = adminGroupinfoDao.findAdminGroupinfoByGroupIdAndMenuId(admin1.getAdminGroup(), fMenu.getId());
-//
-////        System.out.println(groupValue);
-//
-//
-//        if (AuthorityUtil.isHaveAuthority(groupValue.getGroupValue(), menu.getDoSerial()) == 1){
-//            return true;
-//        }
-//        return false;
-//    }
+    @Override
+    public Boolean isHaveAuthority(String admin, String uri) throws IOException {
+        //1. 通过请求地址查询auth_operate表中的对应的operate_codename字段得到对应的操作记录
+        //1.1 解析uri得到操作方法名
+        String codeName = parseCodeName(uri);
+
+        AuthOperate authOperate = authOperateDao.findAuthOperateByOperateCodename(codeName);
+
+        //如果为查询到方法对象说明验证权限失败
+        if (authOperate == null){
+            return false;
+        }
+
+        //2. 通过auth_operate记录中的operate_model关联到auth_model表并获取model对象
+        Integer modelId = authOperate.getOperateModel();
+
+        AuthModel authModel = authModelDao.getOne(modelId);
+
+        //3. 通过admin对象获取admin_group
+        Admin adminObj = adminDao.findByAdminName(admin);
+
+        Integer adminGroupId = adminObj.getAdminGroup();
+
+
+        //4. 通过admin_group的 group_id和model_id 获取admin_groupinfo
+        AdminGroupinfo adminGroupinfo = adminGroupinfoDao.
+                findAdminGroupinfoByAuthModelIdAndGroupId(modelId, adminGroupId);
+
+        //5. 获取到groupinfo的group_value权限值
+        Integer groupValue = adminGroupinfo.getGroupValue();
+
+
+        //6. 通过权限值和操作对象的位置得出是否拥有权限.
+        //获取位置
+        int site = authOperate.getOperateSite();
+        if (AuthorityUtil.isHaveAuthority(groupValue, site) == 1){
+            return true;
+        }
+
+
+
+        return false;
+    }
+
+
+
+    public String parseCodeName(String uri){
+        //分割「/」
+        String[] routes = uri.split("/");
+
+        //获取请求接口/页面
+        String func = routes[routes.length-1];
+
+        //通过「.」截取方法
+        //ps：这个\\.是为了截取. 进行的转义。
+        String codeName = func.split("\\.")[0];
+
+        return codeName;
+    }
+
+
 }

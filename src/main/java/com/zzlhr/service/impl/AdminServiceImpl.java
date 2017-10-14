@@ -8,6 +8,7 @@ import com.zzlhr.service.AdminService;
 import com.zzlhr.util.AuthorityUtil;
 import com.zzlhr.util.BlogException;
 import com.zzlhr.util.Code;
+import com.zzlhr.util.CookieUtils;
 import com.zzlhr.vo.AdminListVo;
 import com.zzlhr.vo.AdminVo;
 import com.zzlhr.vo.MenuVo;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -338,7 +341,34 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
+    /**
+     * 验证登录方法
+     * @param request http request 对象
+     * @return true为验证成功，false为失败，需要后续跳转到登录页面。
+     */
+    public Boolean verifyLogin(HttpServletRequest request){
+        //1. 获取登录账号和token信息
+        Cookie adminCookie = CookieUtils.getCookie(request, "admin");
+        Cookie adminTokenCookie = CookieUtils.getCookie(request, "token");
+        if (adminCookie == null || adminTokenCookie == null){
+            //1.1 如果request对象中未包含帐号信息和token信息返回false
+            return false;
+        }
+        String adminName = adminCookie.getValue();
+        String token = adminTokenCookie.getValue();
 
+        //2. 查询登录用户
+        Admin admin = this.findAdmin(adminName);
+
+        //3. 通过数据库的用户信息与cookie中的信息进行对比
+        if (token.equals(admin.getAdminToken())){
+            //3.1 通过返回true
+            return true;
+        }
+
+        //3.2 未通过返回false
+        return false;
+    }
 
 
 

@@ -3,6 +3,9 @@ import com.zzlhr.entity.AdminGroup;
 import com.zzlhr.entity.MenuDo;
 import com.zzlhr.vo.PageListData;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 /**
  * Created by 刘浩然 on 2017/9/1.
@@ -57,7 +60,7 @@ public interface AuthorityService {
 
 
     /** 是否有权限 */
-//    Boolean isHaveAuthority(String uri, String admin, String token);
+    Boolean isHaveAuthority(String admin, String uri) throws IOException;
 
 
 }
