@@ -1,21 +1,26 @@
 package com.zzlhr.controller;
 
 import com.google.gson.Gson;
+import com.sun.tools.internal.ws.wscompile.AuthInfo;
+import com.zzlhr.dao.AdminGroupDao;
+import com.zzlhr.dao.AdminGroupinfoDao;
+import com.zzlhr.dao.AuthModelDao;
+import com.zzlhr.dao.AuthOperateDao;
 import com.zzlhr.entity.*;
 import com.zzlhr.enums.LoginEnum;
 import com.zzlhr.enums.ResultErrorStatus;
 import com.zzlhr.enums.ResultSuccessStatus;
-import com.zzlhr.service.AdminService;
-import com.zzlhr.service.ArticleService;
-import com.zzlhr.service.FriendLinkService;
-import com.zzlhr.service.MenuService;
+import com.zzlhr.service.*;
 import com.zzlhr.util.*;
+import com.zzlhr.vo.AuthTreeVo;
 import com.zzlhr.vo.LayuiUploadDataVo;
 import com.zzlhr.vo.LayuiUploadVo;
 import javassist.compiler.ast.Keyword;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,10 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.zzlhr.enums.ResultErrorStatus.UNKNOWN_ERROR;
 import static java.lang.String.valueOf;
@@ -42,6 +44,7 @@ import static java.lang.String.valueOf;
 /**
  * Created by 刘浩然 on 2017/7/27.
  */
+@SuppressWarnings("AlibabaAvoidNewDateGetTime")
 @Controller
 @RequestMapping("/admin")
 @Slf4j
@@ -59,7 +62,23 @@ public class AdminController {
     @Autowired
     private FriendLinkService friendLinkService;
 
+    @Autowired
+    private AuthorityService authorityService;
 
+
+    @Autowired
+    private AdminGroupService adminGroupService;
+
+
+    @Autowired
+    private AdminGroupinfoDao adminGroupinfoDao;
+
+
+    @Autowired
+    private AdminGroupDao adminGroupDao;
+
+    @Autowired
+    private AuthOperateDao authOperateDao;
     @Autowired
     private MyApp myApp;
 
@@ -220,7 +239,7 @@ public class AdminController {
             /*token*/
             response.addCookie(new Cookie("token", json.getString("token")));
             /*登录时间*/
-            response.addCookie(new Cookie("lt", String.valueOf(new Date().getTime())));
+            response.addCookie(new Cookie("lt", String.valueOf(System.currentTimeMillis())));
             return "redirect:/admin/index.html";
         }
 //        return gson.toJson(json);
@@ -360,6 +379,11 @@ public class AdminController {
     }
 
 
+    /**
+     * 友链列表
+     * @param request
+     * @return
+     */
     @GetMapping("/findFriendLinkList.html")
     public ModelAndView page_findFriendLinkList(HttpServletRequest request){
         ModelAndView mv = new ModelAndView("admin/findFriendLinkList");
@@ -372,6 +396,214 @@ public class AdminController {
         return mv;
     }
 
+    /**
+     * 权限列表
+     * @param groupId 权限组id
+     * @return
+     */
+    @GetMapping("/findAuth.html")
+    public ModelAndView page_findAuth(@RequestParam(required = false, defaultValue = "1") Integer groupId, HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/findAuth");
+
+        List<AdminGroup> groupList = authorityService.getAllGroupList();
+        String groups = JSONArray.fromObject(groupList).toString();
+        mv.addObject("groups", groups);
+
+
+        List<AuthTreeVo> authTreeVos = authorityService.getAuths();
+        String authTree = JSONArray.fromObject(authTreeVos).toString();
+        mv.addObject("authTree", authTree);
+
+        //拥有的权限
+        List<AuthTreeVo> authTreeVos1 = authorityService.getAuths(groupId);
+        String authTree1 = JSONArray.fromObject(authTreeVos1).toString();
+        mv.addObject("possessAuth", authTree1);
+
+
+        mv.addObject("groupId", groupId);
+
+
+
+        mv = init(mv, request);
+        return mv;
+    }
+
+
+
+    @GetMapping("/addAuth.html")
+    public ModelAndView pageAddAuth(HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("admin/addAuth");
+
+        List<AuthTreeVo> authTreeVos = authorityService.getAuths();
+        String authTree = JSONArray.fromObject(authTreeVos).toString();
+        mv.addObject("authTree", authTree);
+
+        mv = init(mv, request);
+        return mv;
+    }
+
+    @PostMapping("/addAuth.html")
+    public ModelAndView addAuth(String name, HttpServletRequest request) throws IOException {
+        ModelAndView mv = new ModelAndView("admin/result");
+        mv = init(mv, request);
+        if (name != ""){
+            AdminGroup adminGroup = new AdminGroup();
+            adminGroup.setGroupName(name);
+            adminGroup.setGroupStatus(0);
+            int groupId = adminGroupService.addGroup(adminGroup);
+            if (groupId!=0){
+                mv.addObject("message", "添加成功！");
+                mv.addObject("href", "updateAuth.html?groupId=" + groupId);
+                return mv;
+            }else {
+                mv.addObject("message", "添加失败！");
+                mv.addObject("href", "addAuth.html");
+                return mv;
+            }
+        }
+        mv.addObject("message", "添加失败！");
+        mv.addObject("href", "addAuth.html");
+        return mv;
+    }
+
+    @GetMapping("/updateAuth.html")
+    public ModelAndView pageUpdateAuth(Integer groupId,HttpServletRequest request){
+        ModelAndView mv = new ModelAndView("/admin/updateAuth");
+
+        List<AdminGroup> groupList = authorityService.getAllGroupList();
+        String groups = JSONArray.fromObject(groupList).toString();
+        mv.addObject("groups", groups);
+
+        mv.addObject("groupId", groupId);
+
+        List<AuthTreeVo> authTreeVos = authorityService.getAuths();
+        String authTree = JSONArray.fromObject(authTreeVos).toString();
+        mv.addObject("authTree", authTree);
+
+        //拥有的权限
+        List<AuthTreeVo> authTreeVos1 = authorityService.getAuths(groupId);
+        String authTree1 = JSONArray.fromObject(authTreeVos1).toString();
+        mv.addObject("possessAuth", authTree1);
+        mv = init(mv, request);
+        return mv;
+    }
+
+    @ResponseBody
+    @PostMapping("/updateAuth.html")
+    public String updateAuth(String auths, Integer groupId){
+        JSONArray authList = JSONArray.fromObject(auths);
+        System.out.println(authList);
+        List<Map> infoList = new ArrayList<>();
+        for (Object auth : authList){
+            JSONObject json = JSONObject.fromObject(auth);
+            int pid = json.getInt("pid");
+            int id = json.getInt("id");
+
+            if (pid == 0){
+                Map map = new HashMap();
+                map.put("modelId", id);
+                List list = new ArrayList<>();
+                map.put("funcs", list);
+                infoList.add(map);
+                continue;
+            }
+            int a = 0;
+
+            for (Map info : infoList){
+                if (pid == (int)info.get("modelId")){
+                    List list = (List) info.get("funcs");
+                    list.add(id - 10000);
+                    info.put("funcs", list);
+                    a = 1;
+                    break;
+                }
+
+            }
+            if (a == 1){
+                continue;
+            }
+            Map map = new HashMap();
+            map.put("modelId", pid);
+            List list = new ArrayList<>();
+            list.add(id - 10000);
+            map.put("funcs", list);
+            System.out.println(infoList);
+        }
+
+        List<AdminGroupinfo> list = adminGroupinfoDao.findAdminGroupinfosByGroupId(groupId);
+
+        List<Integer> infoIdList = new ArrayList<>();
+        for (Map info : infoList){
+            infoIdList.addAll((List)info.get("funcs"));
+        }
+        System.out.println(infoIdList);
+        List<AuthOperate> operates
+                = authOperateDao.findAll(infoIdList);
+
+
+
+        for (Map info : infoList){
+            int ye = 0;
+            for (AdminGroupinfo item : list){
+                if (item.getAuthModelId() == (Integer) info.get("modelId")){
+                    List<Integer> funcs = (List<Integer>) info.get("funcs");
+                    int valueBin = 0;
+                    for (Integer func : funcs){
+                        System.out.println(func);
+                        for (AuthOperate operate : operates){
+                            if (operate.getId() == func){
+                                valueBin += 1 * Math.pow(10, operate.getOperateSite());
+                                System.out.println(valueBin);
+                            }
+                        }
+                    }
+                    int value = Integer.parseInt(String.valueOf(valueBin),2);
+                    item.setGroupValue(value);
+                    ye = 1;
+                }
+            }
+
+            if (ye == 1){
+                continue;
+            }
+            AdminGroupinfo adminGroupinfo = new AdminGroupinfo();
+
+            adminGroupinfo.setAuthModelId((Integer) info.get("modelId"));
+            adminGroupinfo.setGroupId(groupId);
+
+
+
+
+            List<Integer> funcs = (List<Integer>) info.get("funcs");
+            int valueBin = 0;
+            for (Integer func : funcs){
+                System.out.println(func);
+                for (AuthOperate operate : operates){
+                    if (operate.getId() == func){
+                        valueBin += 1 * Math.pow(10, operate.getOperateSite());
+                        System.out.println(valueBin);
+                    }
+                }
+            }
+            int value = Integer.parseInt(String.valueOf(valueBin),2);
+            adminGroupinfo.setGroupValue(value);
+            list.add(adminGroupinfo);
+        }
+
+
+        adminGroupinfoDao.save(list);
+        return "操作成功！";
+    }
+
+
+    @ResponseBody
+    @GetMapping("/delectAuth.html")
+    public String delectAuth(Integer groupId){
+        AdminGroup adminGroup = adminGroupDao.findOne(groupId);
+        adminGroup.setGroupStatus(1);
+        adminGroupDao.save(adminGroup);
+        return "<script>alert(\"已禁用权限组！\")</script>";
+    }
 
 
     /**
@@ -388,10 +620,8 @@ public class AdminController {
         LayuiUploadDataVo uploadDataVo = new LayuiUploadDataVo();
 
         String contentType = file.getContentType();
-//        String fileName = file.getOriginalFilename();
         String fileName = FileUtil.makeRandomName() + "."
                 + FileUtil.GetFileSuffix(contentType);
-//        String filePath = request.getSession().getServletContext().getRealPath("articleImage/");
         String filePath = myApp.getArticle().get("uploadpath");
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, fileName);

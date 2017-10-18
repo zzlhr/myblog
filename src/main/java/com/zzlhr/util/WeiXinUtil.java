@@ -13,8 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Map;
 
+@SuppressWarnings("AlibabaAvoidNewDateGetTime")
 @Data
-@Component
+//@Component
 @ConfigurationProperties(prefix = "weixin")
 public class WeiXinUtil {
 
@@ -22,7 +23,7 @@ public class WeiXinUtil {
     private String AppSecret;
 
 
-    private Long timestamp = new Date().getTime();
+    private Long timestamp = System.currentTimeMillis();
     private String nonceStr = "tongxinruanjian";
     private String signature;
 

@@ -17,4 +17,6 @@ public interface AdminGroupinfoDao extends JpaRepository<AdminGroupinfo, Integer
     AdminGroupinfo findAdminGroupinfoByAuthModelIdAndGroupId(Integer authModelId,
                                                                 Integer groupId);
 
+    List<AdminGroupinfo> findAdminGroupinfosByGroupId(Integer groupId);
+
 }

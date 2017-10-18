@@ -12,6 +12,10 @@ public interface AuthOperateDao extends JpaRepository<AuthOperate, Integer> {
 
     List<AuthOperate> findAuthOperateByOperateModelAndOperateSiteInAndOperateType(Integer model, List<Integer> operateSite, Integer operateType);
 
+
+    List<AuthOperate> findAuthOperateByOperateModelAndOperateSiteIn(Integer model, List<Integer> operateSite);
+
+
     AuthOperate findAuthOperateByOperateCodename(String operateCodename);
 
 

@@ -21,8 +21,9 @@ public class CookieUtils {
 	 * @return null
 	 */
 	public static void addCookie(HttpServletResponse response, Cookie cookie) {
-		if (cookie != null)
-			response.addCookie(cookie);
+		if (cookie != null) {
+            response.addCookie(cookie);
+        }
 	}
 
 	/**
@@ -50,23 +51,27 @@ public class CookieUtils {
 	 */
 	public static void addCookie(HttpServletResponse response, String cookieName, String cookieValue, String domain,
 			boolean httpOnly, int maxAge, String path, boolean secure) {
-		if (cookieName != null && !cookieName.equals("")) {
-			if (cookieValue == null)
-				cookieValue = "";
+		if (cookieName != null && !"".equals(cookieName)) {
+			if (cookieValue == null) {
+                cookieValue = "";
+            }
 
 			Cookie newCookie = new Cookie(cookieName, cookieValue);
-			if (domain != null)
-				newCookie.setDomain(domain);
+			if (domain != null) {
+                newCookie.setDomain(domain);
+            }
 
 			newCookie.setHttpOnly(httpOnly);
 
-			if (maxAge > 0)
-				newCookie.setMaxAge(maxAge);
+			if (maxAge > 0) {
+                newCookie.setMaxAge(maxAge);
+            }
 
-			if (path == null)
-				newCookie.setPath("/");
-			else
-				newCookie.setPath(path);
+			if (path == null) {
+                newCookie.setPath("/");
+            } else {
+                newCookie.setPath(path);
+            }
 
 			newCookie.setSecure(secure);
 
@@ -107,12 +112,14 @@ public class CookieUtils {
 	public static Cookie getCookie(HttpServletRequest request, String cookieName) {
 		Cookie[] cookies = request.getCookies();
 
-		if (cookies == null || cookieName == null || cookieName.equals(""))
-			return null;
+		if (cookies == null || cookieName == null || "".equals(cookieName)) {
+            return null;
+        }
 
 		for (Cookie c : cookies) {
-			if (c.getName().equals(cookieName))
-				return (Cookie) c;
+			if (c.getName().equals(cookieName)) {
+                return (Cookie) c;
+            }
 		}
 		return null;
 	}
@@ -130,10 +137,11 @@ public class CookieUtils {
 	 */
 	public static String getCookieValue(HttpServletRequest request, String cookieName) {
 		Cookie cookie = getCookie(request, cookieName);
-		if (cookie == null)
-			return null;
-		else
-			return cookie.getValue();
+		if (cookie == null) {
+            return null;
+        } else {
+            return cookie.getValue();
+        }
 	}
 
 	/**
@@ -191,7 +199,7 @@ public class CookieUtils {
 	public static void editCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
 			String cookieValue,String domain) {
 		Cookie c = getCookie(request, cookieName);
-		if (c != null && cookieName != null && !cookieName.equals("") && c.getName().equals(cookieName)) {
+		if (c != null && cookieName != null && !"".equals(cookieName) && c.getName().equals(cookieName)) {
 			addCookie(response, cookieName, cookieValue, domain);
 		}
 	}

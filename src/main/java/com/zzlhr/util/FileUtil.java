@@ -10,6 +10,7 @@ import java.util.Random;
  * @author lhr
  * @create 2017/10/11
  */
+@SuppressWarnings("AlibabaAvoidNewDateGetTime")
 public class FileUtil {
 
     //写文件
@@ -26,7 +27,7 @@ public class FileUtil {
 
     //生成随机名
     public static String makeRandomName(){
-        Long timstamp = new Date().getTime();
+        Long timstamp = System.currentTimeMillis();
         return timstamp + makeRandom(3);
     }
 

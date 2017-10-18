@@ -1,6 +1,7 @@
 package com.zzlhr.enums;
 
 /**
+ * @author lhr
  * Created by 刘浩然 on 2017/7/27.
  */
 public enum LogTypeEnum {

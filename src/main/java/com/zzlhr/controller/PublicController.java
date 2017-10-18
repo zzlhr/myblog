@@ -261,20 +261,20 @@ public class PublicController {
 
         return model;
     }
-    @Autowired
-    private WeiXinUtil wx;
-
-    @ResponseBody
-    @RequestMapping("/getwxconf.json")
-    public String getWxConf(String url, String params){
-        try {
-            wx.setUrlAndParams(url,params);
-            return wx.getWeiXinConf().toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "获取失败";
-    }
+//    @Autowired
+//    private WeiXinUtil wx;
+//
+//    @ResponseBody
+//    @RequestMapping("/getwxconf.json")
+//    public String getWxConf(String url, String params){
+//        try {
+//            wx.setUrlAndParams(url,params);
+//            return wx.getWeiXinConf().toString();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "获取失败";
+//    }
 
 
     /**

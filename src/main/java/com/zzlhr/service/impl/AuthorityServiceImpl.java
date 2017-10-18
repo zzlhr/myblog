@@ -9,7 +9,9 @@ import com.zzlhr.service.AdminService;
 import com.zzlhr.service.AuthorityService;
 import com.zzlhr.util.AuthorityUtil;
 import com.zzlhr.util.CookieUtils;
+import com.zzlhr.vo.AuthTreeVo;
 import com.zzlhr.vo.PageListData;
+import org.apache.http.auth.AUTH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,9 +74,6 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Map<String, Object> setGroupValue(Integer group, Integer Menu, Integer groupValue) {
-
-
-
 
 
         return null;
@@ -149,6 +150,12 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    public List<AdminGroup> getAllGroupList() {
+        return adminGroupDao.findAll();
+    }
+
+
+    @Override
     @Transactional
     public Map<String, Object> addMenu(MenuDo menuDo) {
 
@@ -191,6 +198,72 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    public List<AuthTreeVo> getAuths() {
+
+        //1. 获取models
+        List<AuthModel> models = authModelDao.findAll();
+        List<AuthOperate> authOperates = authOperateDao.findAll();
+
+        List<AuthTreeVo> authTreeVos = new ArrayList<>();
+        for (AuthModel model : models){
+            authTreeVos.add(new AuthTreeVo(
+                    model.getModelName(),
+                    model.getId(),
+                    0, false));
+        }
+
+        int i = 0;
+        for (AuthOperate authOperate : authOperates){
+            authTreeVos.add(new AuthTreeVo(
+                    authOperate.getOperateName(),
+                    authOperate.getId()+10000,
+                    authOperate.getOperateModel(),
+                    false
+            ));
+        }
+
+
+        return authTreeVos;
+    }
+
+    @Override
+    public List<AuthTreeVo> getAuths(Integer groupId) {
+        //1. 通过groupId获取所有GroupInfo
+        List<AdminGroupinfo> groupinfos =
+                adminGroupinfoDao.findAdminGroupinfosByGroupId(groupId);
+        List<Map> authList = new ArrayList<>();
+        //创建一个map存放需要查询的操作
+        //2. 通过groupinfo
+        List<AuthOperate> operates = new ArrayList<>();
+        for (AdminGroupinfo groupinfo : groupinfos){
+            int modelId = groupinfo.getAuthModelId();
+            byte[] valueByte = AuthorityUtil.decimalToBinary(groupinfo.getGroupValue());
+            List<Integer> auths = new ArrayList<>();
+            //计次
+            int i = 0;
+            for (byte bt : valueByte){
+                if ((int)bt == 49){
+                    auths.add(i);
+                }
+                i++;
+            }
+            operates.addAll(authOperateDao.findAuthOperateByOperateModelAndOperateSiteIn(modelId, auths));
+        }
+        List<AuthTreeVo> result = new ArrayList<>();
+        for (AuthOperate authOperate : operates){
+            result.add(new AuthTreeVo(authOperate.getOperateName(),
+                    authOperate.getId()+10000,
+                    authOperate.getOperateModel(),
+                    true,
+                    true));
+        }
+
+
+        return result;
+    }
+
+
+    @Override
     public Boolean isHaveAuthority(String admin, String uri) throws IOException {
         //1. 通过请求地址查询auth_operate表中的对应的operate_codename字段得到对应的操作记录
         //1.1 解析uri得到操作方法名
@@ -228,9 +301,6 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (AuthorityUtil.isHaveAuthority(groupValue, site) == 1){
             return true;
         }
-
-
-
         return false;
     }
 

@@ -1,11 +1,13 @@
 package com.zzlhr.service;
 import com.zzlhr.entity.AdminGroup;
 import com.zzlhr.entity.MenuDo;
+import com.zzlhr.vo.AuthTreeVo;
 import com.zzlhr.vo.PageListData;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 /**
  * Created by 刘浩然 on 2017/9/1.
@@ -45,6 +47,12 @@ public interface AuthorityService {
     /** 获取Menu菜单列表 */
     PageListData<AdminGroup> getGroupList(String groupName, Integer status, Integer page);
 
+    /**
+     * 查询全部菜单，用于权限设置
+     */
+    List<AdminGroup> getAllGroupList();
+
+
     /** 添加菜单 */
     Map<String, Object> addMenu(MenuDo menuDo);
 
@@ -58,6 +66,18 @@ public interface AuthorityService {
     Map<String, Object> delectMenu(Integer menuId);
 
 
+    /**
+     * 获取菜单。（全部，不选中）
+     * @return
+     */
+    List<AuthTreeVo> getAuths();
+
+    /**
+     * 根据权限组id获取权限菜单
+     * @param groupId 权限组
+     * @return
+     */
+    List<AuthTreeVo> getAuths(Integer groupId);
 
     /** 是否有权限 */
     Boolean isHaveAuthority(String admin, String uri) throws IOException;

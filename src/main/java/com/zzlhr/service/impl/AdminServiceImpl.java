@@ -346,6 +346,7 @@ public class AdminServiceImpl implements AdminService {
      * @param request http request 对象
      * @return true为验证成功，false为失败，需要后续跳转到登录页面。
      */
+    @Override
     public Boolean verifyLogin(HttpServletRequest request){
         //1. 获取登录账号和token信息
         Cookie adminCookie = CookieUtils.getCookie(request, "admin");

@@ -28,7 +28,6 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     @Autowired
     private AdminService adminService;
 
-
     @Autowired
     private MyApp myApp;
 
