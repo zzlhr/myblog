@@ -59,34 +59,14 @@
 
     var menuJson = ${menus};
 
-    var articled = ${article}
-
-    function menuShow() {
-        var code = '';
-        for (var i=0;i<menuJson.length;i++){
-            var model = '<li class="layui-nav-item layui-nav-itemed">' +
-                    '          <a class="">{{name}}</a>' +
-                    '          <dl class="layui-nav-child">' +
-                    '            {{item}}'+
-                    '          </dl>' +
-                    '        </li>';
-
-            var modelCode = model.replace("{{name}}",menuJson[i].modelName)
-
-            var itemModel = '<dd><a href="{{href}}">{{name}}</a></dd>';
-
-            var item = ''
-            var itemJson = menuJson[i].operates;
-            for(var j=0;j<itemJson.length;j++){
-                item += itemModel.replace("{{href}}",itemJson[j].operateCodename+".html").replace("{{name}}",itemJson[j].operateName)
-            }
-            code += modelCode.replace("{{item}}", item);
-        }
-        $("#menunav").html(code);
+    var articled = ${article};
+    function init() {
+        menuShow();
+        setArticle();
     }
-    menuShow();
 
-    setArticle();
+
+
     layui.use(['form', 'layedit', 'laydate'], function(){
         var form = layui.form
                 ,layer = layui.layer
@@ -145,12 +125,18 @@
 
     }
 
-    function GetQueryString(name)
-    {
+    function GetQueryString(name){
         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
         if(r!=null)return  unescape(r[2]); return null;
     }
+
+
+
+    $(document).ready(function () {
+        init();
+    });
+
 </script>
 </body>
 </html>

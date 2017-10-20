@@ -56,12 +56,7 @@
 
     var authTree = ${authTree};
     var possessAuth = ${possessAuth};
-    $(document).ready(function(){
-        var arrayTree = [];
-        arrayTree = possessAuth.concat(authTree);
-        arrayTree = uniqueArray(arrayTree, "id");
-        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, arrayTree);
-    });
+
     /*
     * JSON数组去重
     * @param: [array] json Array
@@ -88,35 +83,10 @@
 
     var groups = ${groups};
 
-    var menuJson = ${menus};
-    function menuShow() {
-        var code = '';
-        for (var i=0;i<menuJson.length;i++){
-            var model = '<li class="layui-nav-item layui-nav-itemed">' +
-                    '          <a class="">{{name}}</a>' +
-                    '          <dl class="layui-nav-child">' +
-                    '            {{item}}'+
-                    '          </dl>' +
-                    '        </li>';
-
-            var modelCode = model.replace("{{name}}",menuJson[i].modelName)
-
-            var itemModel = '<dd><a href="{{href}}">{{name}}</a></dd>';
-
-            var item = ''
-            var itemJson = menuJson[i].operates;
-            for(var j=0;j<itemJson.length;j++){
-                item += itemModel.replace("{{href}}",itemJson[j].operateCodename+".html").replace("{{name}}",itemJson[j].operateName)
-            }
-            code += modelCode.replace("{{item}}", item);
-        }
-        $("#menunav").html(code);
-    }
-    menuShow();
-
     function init() {
         //初始化权限树状图
         initGroups();
+        menuShow();
         var doms = $("#groupId").children();
         for(var i=0;i<doms.length; i++){
             if($(doms[i]).val() == ${groupId?string}){
@@ -127,7 +97,6 @@
             updateAuth();
         })
     }
-    init();
     function initGroups() {
         var model = "<option value='{{id}}'>{{name}}</option>";
         var html = "<option value=''>请选择权限组</option>";
@@ -147,8 +116,6 @@
             }
             dataArray.push(auth);
         }
-
-        console.log(dataArray);
         $.ajax({
             url: "updateAuth.html",
             type: "post",
@@ -169,6 +136,13 @@
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element;
+    });
+    $(document).ready(function(){
+        init();
+        var arrayTree = [];
+        arrayTree = possessAuth.concat(authTree);
+        arrayTree = uniqueArray(arrayTree, "id");
+        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, arrayTree);
     });
 </script>
 </body>

@@ -40,10 +40,21 @@
 <#include "foot.ftl"/>
 
 <script>
+    function init() {
+        menuShow();
+        dataShow();
+    }
 
     var menuJson = ${menus};
-    var articleList = ${articleList}
+
+    var articleList = ${articleList};
+
+    var page_now = ${page};
+
+    var page_total = ${totalPage};
+
     function dataShow() {
+
         var model = "<tr><td>{{id}}</td><td>{{title}}</td><td>{{admin}}</td><td>{{keyword}}</td>" +
                 "<td>{{click}}</td><td>{{class}}</td><td>{{status}}</td><td>{{updatetime}}</td><td>" +
                 "<a class='layui-btn-small' href='updateArticle.html?id={{id}}'>修改</a></td></tr>";
@@ -66,41 +77,16 @@
         }
         $("#articleTbody").html(rec);
     }
-    dataShow();
-    function menuShow() {
-        var code = '';
-        for (var i=0;i<menuJson.length;i++){
-            var model = '<li class="layui-nav-item layui-nav-itemed">' +
-                    '          <a class="">{{name}}</a>' +
-                    '          <dl class="layui-nav-child">' +
-                    '            {{item}}'+
-                    '          </dl>' +
-                    '        </li>';
-
-            var modelCode = model.replace("{{name}}",menuJson[i].modelName)
-
-            var itemModel = '<dd><a href="{{href}}">{{name}}</a></dd>';
-
-            var item = ''
-            var itemJson = menuJson[i].operates;
-            for(var j=0;j<itemJson.length;j++){
-                item += itemModel.replace("{{href}}",itemJson[j].operateCodename+".html").replace("{{name}}",itemJson[j].operateName)
-            }
-            code += modelCode.replace("{{item}}", item);
-        }
-        $("#menunav").html(code);
-    }
-    menuShow();
-
-
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element
     });
 
+
+
     $("#page").pagination({
-        currentPage: ${page},// 当前页数
-        totalPage: ${totalPage},// 总页数
+        currentPage: page_now,// 当前页数
+        totalPage: page_total,// 总页数
         isShow: true,// 是否显示首尾页
         count: 5,// 显示个数
         homePageText: "首页",// 首页文本
@@ -113,18 +99,16 @@
             window.location.href = changeUrlArg(window.location.href, "page", current);
         }
     });
-    function GetQueryString(name)
-    {
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if(r!=null)return  unescape(r[2]); return null;
-    }
 
     function changeUrlArg(url, arg, val){
+
+
+    //替换
         var pattern = arg+'=([^&]*)';
         var replaceText = arg+'='+val;
         return url.match(pattern) ? url.replace(eval('/('+ arg+'=)([^&]*)/gi'), replaceText) : (url.match('[\?]') ? url+'&'+replaceText : url+'?'+replaceText);
     }
+    $(document).ready(init());
 </script>
 </body>
 </html>
